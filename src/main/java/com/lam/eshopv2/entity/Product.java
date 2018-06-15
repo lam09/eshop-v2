@@ -37,10 +37,10 @@ public class Product implements Serializable {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "CODE", length = 20, nullable = false)
+    @Column(name = "CODE", length = 20, nullable = true)
     private String code;
 
-    @Column(name = "NAME", length = 255, nullable = false)
+    @Column(name = "NAME", length = 255, nullable = true)
     private String name;
 
     @Column(name = "PRICE", nullable = true)

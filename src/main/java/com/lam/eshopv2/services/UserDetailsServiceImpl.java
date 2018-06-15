@@ -32,10 +32,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private AccountRepository accountRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        System.out.print("user name is "+name);
         Account user = accountRepository.findAccountByName(name);
         System.out.println("Account= " + user.getName());
 

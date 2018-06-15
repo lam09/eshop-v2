@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="css/products.css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-md-3 col-sm-6" th:each="product : ${products}">
+    		<span class="thumbnail">
+      			<img src="http://placehold.it/500x400" alt="...">
+      			<a th:href="@{|/product/${product.id}|}">
+                <h4 th:text="${product.name}"></h4>
+                </a>
+      			<p th:text="${product.description}">Product Description here. </p>
+      			<hr class="line">
+      			<div class="row">
+      				<div class="col-md-6 col-sm-6">
+      					<p class="price" th:text="${product.price}+€"></p>
+      				</div>
+                    <th:block sec:authorize="hasAnyRole('ROLE_MANAGER')">
+                        <div class="span1">
+                        <a th:href="@{|/admin/editproduct/${product.id}|}" class="btn btn-primary">
+                        <i class="icon-edit icon-white"></i>
+                        <span><strong>Edit</strong></span>
+                        </a>
+                        </div>
+                        <div class="span1">
+                        <a href="#" class="btn btn-primary">
+    	                <i class="icon-trash icon-white"></i>
+	                    <span><strong>Deactivate</strong></span>
+                        </a>
+                        </div>
+                    </th:block>
+                    <div class="col-md-6 col-sm-6">
+      					<button class="btn btn-success right"> BUY ITEM</button>
+      				</div>
+
+                </div>
+    		</span>
+            </div>
+        </div>
+        <br/>
+    </div>
+</div>
+
+</body>
+</html>
