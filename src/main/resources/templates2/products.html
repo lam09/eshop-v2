@@ -329,7 +329,7 @@
                       <a href="#" class="list active">
                         List
                       </a>
-                      <a  th:href="@{|/productList?type=grid|}" class="grid">
+                      <a  th:href="@{|/products?type=grid|}" class="grid">
                         Grid
                       </a>
                     </div>
@@ -363,35 +363,36 @@
                     </div>
                   </div>
 
-                  <div class="pager" th:if="${paginationProducts.totalPages > 1}">
+                  <div class="pager" th:if="${maxPage >= 1}">
                     <a href="#" class="prev-page">
                       <i class="fa fa-angle-left">
                       </i>
                     </a>
-                    <th:block th:each="page : ${paginationProducts.navigationPages}">
-                      <a th:href="@{|/productList?page=${page}|}" th:if="${page != -1}"
+                    <th:block th:each="page : ${listPages}">
+                      <a th:href="@{|/products?page=${page}|}" th:if="${page != -1}"
                          class="active" th:utext="${page}"></a>
                       <span  class="nav-item" th:if="${page == -1}"> ... </span>
                     </th:block>
-                    <a href="#" class="next-page">
+
+                    <a th:href="@{|/products?page=${currentPage+1}|}" class="next-page" th:if="${currentPage < maxPage}">
                       <i class="fa fa-angle-right">
                       </i>
                     </a>
                   </div>
 
                 </div>
-                <div class="product-preview-container" th:each="prodInfo : ${paginationProducts.list}">
+                <div class="product-preview-container" th:each="prodInfo : ${products}">
                 <ul class="products-listItem">
                   <li class="products">
                     <div class="offer">
                       New
                     </div>
                     <div  class="thumbnail">
-                      <img th:src="@{|/productImage?code=${prodInfo.code}|}" alt="Product Name">
+                      <img th:src="@{|/productImage?id=${prodInfo.id}|}" alt="Product Name">
                     </div>
                     <div class="product-list-description">
                       <div class="productname">
-                        <a  th:href="@{|/product?code=${prodInfo.code}|}" th:utext="${prodInfo.name}"></a>
+                        <a  th:href="@{|/product/${prodInfo.id}|}" th:utext="${prodInfo.name}"></a>
                       </div>
                       <p>
                         <img src="images/star.png" alt="">
@@ -436,7 +437,7 @@
                       <a href="#" class="list active">
                         List
                       </a>
-                      <a th:href="@{|/productList?type=grid|}" class="grid">
+                      <a th:href="@{|/products?type=grid|}" class="grid">
                         Grid
                       </a>
                     </div>
@@ -469,21 +470,18 @@
                       </select>
                     </div>
                   </div>
-                  <div class="pager">
+                  <div class="pager" th:if="${maxPage >= 1}">
                     <a href="#" class="prev-page">
                       <i class="fa fa-angle-left">
                       </i>
                     </a>
-                    <a href="#" class="active">
-                      1
-                    </a>
-                    <a href="#">
-                      2
-                    </a>
-                    <a href="#">
-                      3
-                    </a>
-                    <a href="#" class="next-page">
+                    <th:block th:each="page : ${listPages}">
+                      <a th:href="@{|/products?page=${page}|}" th:if="${page != -1}"
+                         class="active" th:utext="${page}"></a>
+                      <span  class="nav-item" th:if="${page == -1}"> ... </span>
+                    </th:block>
+
+                    <a th:href="@{|/products?page=${currentPage+1}|}" class="next-page" th:if="${currentPage < maxPage}">
                       <i class="fa fa-angle-right">
                       </i>
                     </a>

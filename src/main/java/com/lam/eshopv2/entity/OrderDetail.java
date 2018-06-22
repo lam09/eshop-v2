@@ -36,6 +36,16 @@ public class OrderDetail implements Serializable {
     @Column(name = "Amount", nullable = false)
     private double amount;
 
+    public OrderDetail(){};
+
+    public OrderDetail(Order order, Product product, int quantity, double price, double amount) {
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+        this.amount = amount;
+    }
+
     public String getId() {
         return id;
     }

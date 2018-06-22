@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        .navigation-order {
+            margin-bottom: 30px;
+        }
+    </style>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/product.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script type="text/javascript" src="js/product.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <div class="products" style="padding: 5%">
+                    <h1>Product</h1>
+                    <form>
+                        <div class="form-group" hidden="true">
+                            <label for="product_id">id:</label>
+                            <input type="text" class="form-control" id="product_id" th:value="${product.id}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_code"><strong>Code:</strong></label>
+                            <input type="text" class="form-control" id="product_code" th:value="${product.code}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_name"><strong>Product Name:</strong></label>
+                            <input type="text" class="form-control" id="product_name" th:value="${product.name}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_price"><strong>Price:</strong></label>
+                            <input type="text" class="form-control" id="product_price" th:value="${product.price}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_description"><strong>Description:</strong></label>
+                            <textarea cols="40" rows="5" type="text" class="form-control" id="product_description"
+                                      th:text="${product.description}"/></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_quantity"><strong>Quantity:</strong></label>
+                            <input type="text" class="form-control" id="product_quantity"
+                                   th:value="${product.quantity}"/>
+                        </div>
+                        <button type="submit" class="btn btn-default" id="btn_submit">Save</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <div class="products" style="padding: 5%">
+                    <h3>Category</h3>
+                    <form style="padding: 5%">
+                        <div class="form-inline">
+                            <input type="text" class="form-control" id="category_name" placeholder="new category name"
+                                   style="width: 40%">
+                            <button type="submit" class="btn btn-default" id="btn_category_submit">Add</button>
+                        </div>
+                    </form>
+                    <ul class="list-group" id="product_category_list" th:object="${categories}">
+                        <li class="list-group-item" th:each="category : ${categories}">
+                            <div class="row">
+                                <span th:text="${category.name}" style="padding: 2%;font-weight: bold;">Category </span>
+                                <button class="glyphicon glyphicon-remove"
+                                        th:onclick="'removeCategory(\'' + ${category.id} + '\');'"></button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <div class="products" style="padding: 5%">
+                    <h2 style="padding: 5%">Edit gallery</h2>
+                    <form th:object="${imageForm}" th:action="@{|/addimage|}"
+                          method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <label>Upload Image</label>
+                            <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-file">
+                                    Browse… <input type="file" id="imgInp" th:field="*{fileData}" multiple/>
+                                </span>
+                            </span><input type="text" class="form-control" readonly>
+                            </div>
+                            <img id='img-upload'/>
+                        </div>
+                        <button type="submit" value="Submit">Upload</button>
+                    </form>
+                    <div class="layout">
+                        <section class="inner">
+                            <ul class="grid">
+                                <li class="grid-tile" th:each="id : ${imageIds}">
+                                    <div class="item">
+                                        <div class="item-img"
+                                             th:style="'background:url(' + @{|/image?=${id}|} + ');'+' background-size: auto auto; background-size: 150%; background-position: center 30%;}'"></div>
+                                        <div class="item-pnl">
+                                            <div class="pnl-wrapper">
+                                                <a href="#" class="btn btn-primary a-btn-slide-text">
+                                                    <span class="glyphicon glyphicon-eye-open"
+                                                          aria-hidden="true"></span>
+                                                    <span><strong>Set to profil</strong></span>
+                                                </a>
+                                                <a href="#" class="btn btn-primary a-btn-slide-text">
+                                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                    <span><strong>Delete</strong></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+    </div>
+</div>
+<!--<script src="js/jquery.js" type="application/javascript"></script>-->
+<script type="application/javascript">
+    $(document).ready(function () {
+        $('#btn_submit').on("click", function (e) {
+            e.preventDefault();
+            var productId, productName, productPrice, productDescription, productCode, productQuantity;
+            productId = $('#product_id').val();
+            productName = $('#product_name').val();
+            productPrice = $('#product_price').val();
+            productDescription = $('#product_description').val();
+            productCode = $('#product_code').val();
+            productQuantity = $('#product_quantity').val();
+            if ($.trim(productName) === "") {
+                alert("Product name cannot be empty");
+            }
+            else if (!$.trim($.isNumeric(productPrice))) {
+                alert("Price must be numeric");
+            }
+            else {
+                var data = {};
+                data["id"] = productId;
+                data["name"] = productName;
+                data["price"] = productPrice;
+                data["description"] = productDescription;
+                data["code"] = productCode;
+                data["quantity"] = productQuantity;
+                console.log(JSON.stringify(data));
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json",
+                    url: "/admin/editproduct/saveedittedproduct",
+                    data: JSON.stringify(data),
+                    //dataType: 'json',
+                    timeout: 6000,
+                    success: function (data) {
+                        if (confirm(data)) {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        });
+        $('#btn_category_submit').on("click", function (e) {
+            e.preventDefault();
+            var categoryName;
+            categoryName = $('#category_name').val();
+            var productId, productName, productPrice, productDescription, productCode, productQuantity;
+            productId = $('#product_id').val();
+            productName = $('#product_name').val();
+            productPrice = $('#product_price').val();
+            productDescription = $('#product_description').val();
+            productCode = $('#product_code').val();
+            productQuantity = $('#product_quantity').val();
+
+            if ($.trim(categoryName) === "") {
+                alert("Category name cannot be empty");
+            }
+            else {
+                var data = {};
+                data["name"] = categoryName;
+                data["product"] = {};
+                data["product"]["id"] = productId;
+                data["product"]["name"] = productName;
+                data["product"]["price"] = productPrice;
+                data["product"]["description"] = productDescription;
+                data["product"]["code"] = productCode;
+                data["product"]["quantity"] = productQuantity;
+                console.log(JSON.stringify(data));
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json",
+                    url: "/admin/editproduct/addcategory",
+                    data: JSON.stringify(data),
+                    timeout: 6000,
+                    success: function (fragment) {
+                        $("#product_category_list").replaceWith(fragment);
+                        $('#category_name').val("");
+                    }
+                });
+            }
+        });
+        $(document).on('change', '.btn-file :file', function () {
+            var input = $(this),
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [label]);
+        });
+
+        $('.btn-file :file').on('fileselect', function (event, label) {
+
+            var input = $(this).parents('.input-group').find(':text'),
+                log = label;
+
+            if (input.length) {
+                input.val(log);
+            } else {
+                if (log) alert(log);
+            }
+
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#img-upload').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#imgInp").change(function () {
+            readURL(this);
+        });
+
+    });
+    function removeCategory(id) {
+        console.log("fucking function");
+        $.ajax({
+            type: 'POST',
+            contentType: "application/json",
+            url: "/admin/editproduct/removecategory?categoryId=" + id,
+            timeout: 6000,
+            success: function (fragment) {
+                $("#product_category_list").replaceWith(fragment);
+            }
+        });
+    }
+    function updateCategoryList() {
+        var productId = $('#product_id').val();
+        $.get("productcategory/" + productId, function (fragment) { // get from controller
+            $("#product_category_list").replaceWith(fragment); // update snippet of page
+        });
+
+        /*   $.get("/admin/editproduct/removecategory", function(fragment) { // get from controller
+         $("#product_category_list").replaceWith(fragment); // update snippet of page
+         });*/
+    }
+</script>
+</body>
+</html>

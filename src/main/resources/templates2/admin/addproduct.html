@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="page-header" id="banner">
+        <div class="row">
+            <div class="col-lg-8 col-md-7 col-sm-6">
+                <h3>Add product form</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="product_name">Product Name:</label>
+                        <input type="text" class="form-control" id="product_name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_price">Price:</label>
+                        <input type="text" class="form-control" id="product_price"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_description">Description:</label>
+                        <textarea cols="40" rows="5" type="text" class="form-control" id="product_description"/></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_code">Code:</label>
+                        <input type="text" class="form-control" id="product_code"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_quantity">Quantity:</label>
+                        <input type="text" class="form-control" id="product_quantity"/>
+                    </div>
+                    <button type="submit" class="btn btn-default" id="btn_submit">Add New Product</button>
+                </form>
+            </div>
+        </div>
+        <br/>
+    </div>
+</div>
+<!--<script src="js/jquery.js" type="application/javascript"></script>-->
+<script type="application/javascript">
+    $(document).ready(function () {
+        $('#btn_submit').on("click", function (e) {
+            e.preventDefault();
+            var productName, productPrice, productDescription, productCode, productQuantity;
+            productName = $('#product_name').val();
+            productPrice = $('#product_price').val();
+            productDescription = $('#product_description').val();
+            productCode = $('#product_code').val();
+            productQuantity = $('#product_quantity').val();
+            if ($.trim(productName) === "") {
+                alert("Product name cannot be empty");
+            }
+            else if (!$.trim($.isNumeric(productPrice))) {
+                alert("Price must be numeric");
+            }
+            else {
+                var data = {};
+                data["name"] = productName;
+                data["price"] = productPrice;
+                data["description"] = productDescription;
+                data["code"] = productCode;
+                data["quantity"] = productQuantity;
+                console.log(JSON.stringify(data));
+                $.ajax({
+                    type: 'POST',
+                    contentType: "application/json",
+                    url: "/admin/saveproduct",
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    timeout: 6000,
+                    success: function (data) {
+                        if (confirm(data)){
+//                         window.location.reload();
+                         window.location.href="/admin/editProduct/"+data;
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

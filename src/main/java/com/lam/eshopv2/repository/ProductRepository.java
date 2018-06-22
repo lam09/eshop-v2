@@ -1,5 +1,6 @@
 package com.lam.eshopv2.repository;
 
+import com.lam.eshopv2.entity.Category;
 import com.lam.eshopv2.entity.Product;
 import com.lam.eshopv2.pagination.PaginationResult;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +19,10 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer>,ProductRepositoryCustom,PagingAndSortingRepository<Product, Integer>{
 
-    Product findProductById(Integer id);
+    @Query(value = "select * from products where id= :id",nativeQuery = true)
+    Product findProductById(@Param("id")Integer id);
+
+    Product findProductByCode(String code);
 
     @Query(value="select count(*) FROM products ",nativeQuery = true)
     Integer countProducts();
@@ -26,6 +30,16 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,Produ
     @Query(value="select * FROM products " +
             "limit :LIMIT " +
             "offset :OFFSET",nativeQuery = true)
-    List<Product> paginationProducṭ̣(@Param("LIMIT") Integer limit,@Param("OFFSET") Integer offset);
+    List<Product> paginationProduct(@Param("LIMIT") Integer limit,@Param("OFFSET") Integer offset);
 
+    @Query(value="select count(p.*) FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME",nativeQuery = true)
+    Integer countProductsByCategory(@Param("CATEGORYNAME")String CATEGORYNAME);
+
+    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME",nativeQuery = true)
+    List<Product> findProductsByCategory(@Param("CATEGORYNAME")String CATEGORYNAME);
+
+    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME " +
+            "limit :LIMIT " +
+            "offset :OFFSET",nativeQuery = true)
+    List<Product> paginationProductByCategory(@Param("CATEGORYNAME")String CATEGORYNAME,@Param("LIMIT") Integer limit,@Param("OFFSET") Integer offset);
 }

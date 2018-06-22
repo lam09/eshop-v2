@@ -1,5 +1,8 @@
 package com.lam.eshopv2.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -21,13 +24,18 @@ public class Category implements Serializable {
     private String name;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "CATEGORY_PRODUCT",
-            joinColumns = @JoinColumn(name = "CATEGIRY_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID")
-    )
-    private Set<Product> products;
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Product product;
 
     public Category() {
     }
@@ -52,11 +60,5 @@ public class Category implements Serializable {
         this.name = name;
     }
 
-    public Set<Product> getProducts() {
-        return products;
-    }
 
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
 }

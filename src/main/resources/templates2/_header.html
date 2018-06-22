@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-2 col-sm-2">
-                <div class="logo"><a th:href="@{/}"><img src="images/logo.png" alt="FlatShop"></a></div>
+                <div class="logo"><a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="FlatShop"></a></div>
             </div>
             <div class="col-md-10 col-sm-10">
                 <div>
@@ -91,9 +91,9 @@
                                         <li><a href="index.html">home</a></li>
                                         <li><a href="home2.html">home2</a></li>
                                         <li><a href="home3.html">home3</a></li>
-                                        <li><a href="productList.html">Productlitst</a></li>
-                                        <li><a href="productgird.html">Productgird</a></li>
-                                        <li><a href="productDetail.html">Details</a></li>
+                                        <li><a href="products.html">Productlitst</a></li>
+                                        <li><a href="productgrid.html">Productgird</a></li>
+                                        <li><a href="productdetail.html">Details</a></li>
                                         <li><a href="cart.html">Cart</a></li>
                                         <li><a href="checkout.html">CheckOut</a></li>
                                         <li><a href="checkout2.html">CheckOut2</a></li>
@@ -101,36 +101,9 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li><a href="productgird.html">men</a></li>
-                            <li><a href="productList.html">women</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fashion</a>
-                                <div class="dropdown-menu mega-menu">
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6">
-                                            <ul class="mega-menu-links">
-                                                <li><a href="productgird.html">New Collection</a></li>
-                                                <li><a href="productgird.html">Shirts & tops</a></li>
-                                                <li><a href="productgird.html">Laptop & Brie</a></li>
-                                                <li><a href="productgird.html">Dresses</a></li>
-                                                <li><a href="productgird.html">Blazers & Jackets</a></li>
-                                                <li><a href="productgird.html">Shoulder Bags</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6">
-                                            <ul class="mega-menu-links">
-                                                <li><a href="productgird.html">New Collection</a></li>
-                                                <li><a href="productgird.html">Shirts & tops</a></li>
-                                                <li><a href="productgird.html">Laptop & Brie</a></li>
-                                                <li><a href="productgird.html">Dresses</a></li>
-                                                <li><a href="productgird.html">Blazers & Jackets</a></li>
-                                                <li><a href="productgird.html">Shoulder Bags</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li><a href="productgird.html">gift</a></li>
+                            <li><a href="productgrid.html">Man</a></li>
+                            <li><a href="products.html">Woman</a></li>
+                            <li><a href="/products">All Product</a></li>
                             <li><a th:href="@{/}">Home</a></li>
                             <li><a th:href="@{/productList}">Product List</a></li>
                             <li><a th:href="@{/shoppingCart}">My Cart</a></li>
@@ -138,7 +111,7 @@
                                 <li><a th:href="@{/admin/orderList}">Order List</a></li>
                             </th:block>
                             <th:block sec:authorize="hasRole('ROLE_MANAGER')">
-                                <li><a th:href="@{/admin/product}">Create Product</a></li>
+                                <li><a th:href="@{/admin/createProduct}">Create Product</a></li>
                             </th:block>
                         </ul>
                     </div>

@@ -16,4 +16,6 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     @org.springframework.data.jpa.repository.Query(value = "SELECT *" +
             "from account where name =:NAME ",nativeQuery = true)
     Account findAccountByName(@Param("NAME") String name);
+
+
 }

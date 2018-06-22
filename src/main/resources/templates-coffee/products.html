@@ -100,6 +100,7 @@
                data["description"] = productDescription;
                data["code"] = productCode;
                data["quantity"] = productQuantity;
+               console.log( JSON.stringify(data));
                $.ajax({
                    type: 'POST',
                    contentType: "application/json",
@@ -109,7 +110,7 @@
                    timeout: 6000,
                    success: function (data) {
                        if (confirm("Product with Id " +data + " Saved")){
-                           window.location.reload();
+                          // window.location.reload();
                        }
                    }
                });

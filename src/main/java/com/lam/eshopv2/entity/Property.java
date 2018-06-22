@@ -1,5 +1,8 @@
 package com.lam.eshopv2.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 /**
@@ -18,6 +21,20 @@ public class Property {
 
     @Column(name = "value")
     private String value;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Product product;
+
 
     public Property() {
     }

@@ -7,6 +7,7 @@ package com.lam.eshopv2.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,7 +24,7 @@ public class Product implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
+/*
     public Set<Property> getProperties() {
         return properties;
     }
@@ -31,7 +32,7 @@ public class Product implements Serializable {
     public void setProperties(Set<Property> properties) {
         this.properties = properties;
     }
-
+*/
     @Id
     @Column(name = "ID", length = 20, nullable = false)
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -59,14 +60,26 @@ public class Product implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<ProductImage> productImages;
 
-    @ManyToMany
+/*
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Category> categories;
+*/
+ /*   @ManyToMany
     @JoinTable(
             name = "PRODUCT_PROPERTY",
             joinColumns = @JoinColumn(name = "PRODUCT_ID"),
             inverseJoinColumns = @JoinColumn(name = "PROPERTY_ID")
     )
     private Set<Property> properties;
-
+*/
     public Product() {
     }
 

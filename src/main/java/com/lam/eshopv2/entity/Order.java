@@ -7,6 +7,7 @@ package com.lam.eshopv2.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ORDERS", //
@@ -45,6 +46,17 @@ public class Order implements Serializable {
 
     @Column(name = "CUSTOMER_PHONE", length = 128, nullable = false)
     private String customerPhone;
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderDetail> orderDetails;
 
     public String getId() {
         return id;

@@ -26,6 +26,7 @@ public class ProductImage implements Serializable{
 
     @Column(name = "TYPE", nullable = true)
     private String type;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID", nullable = false, //
             foreignKey = @ForeignKey(name = "PRODUCT_IMAGE_PROD_FK"))
