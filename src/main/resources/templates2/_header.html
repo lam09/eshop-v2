@@ -30,8 +30,8 @@
                                         </th:block>
 
                                         <th:block sec:authorize="!isAuthenticated()">
-                                            <li><a th:href="@{/login}" class="log">Login</a></li>
-                                            <li><a href="checkout2.html" class="reg">Register</a></li>
+                                            <li><a th:href="@{/shop/login}" class="log">Login</a></li>
+                                            <li><a th:href="@{/shop/login#register-form-link}" class="reg">Register</a></li>
 
                                         </th:block>
                                     </ul>
@@ -48,33 +48,33 @@
                         <li id="search" class="search">
                             <form><input class="search-submit" type="submit" value=""><input class="search-input" placeholder="Enter your search term..." type="text" value="" name="search"></form>
                         </li>
-                        <li class="option-cart">
+                        <li class="option-cart" id="cart-item-list">
                             <th:block th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
                                 <a href="#" class="cart-icon">cart <span class="cart_no">0</span></a>
                             </th:block>
 
                             <th:block th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
-                            <a href="#" class="cart-icon">cart <span class="cart_no" th:utext="${cartForm.cartLines.length}"></span></a>
+                            <a href="#" class="cart-icon">cart <span class="cart_no" th:utext="${#lists.size(cartForm.cartLines)}"></span></a>
                             </th:block>
 
-                            <ul class="option-cart-item">
+                            <ul class="option-cart-item" >
                                 <th:block th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
                                     <li th:each="cartLineInfo, varStatus : ${cartForm.cartLines}">
                                         <div class="cart-item" >
-                                            <div class="image"><img th:src="@{|/productImage?code=${cartLineInfo.productInfo.code}|}" alt=""></div>
+                                            <div class="image"><img th:src="@{/images/logo.png}" alt=""></div>
                                             <div class="item-description">
-                                                <p class="name" th:utext="${cartLineInfo.productInfo.name}"></p>
+                                                <p class="name" th:utext="${cartLineInfo.product.name}"></p>
                                                 <p>Size: <span class="light-red">One size</span><br>Quantity: <span class="light-red" th:value="${cartLineInfo.quantity}"></span></p>
                                             </div>
                                             <div class="right">
-                                                <p class="price" th:utext="${#numbers.formatDecimal(cartLineInfo.productInfo.price,3,2,'COMMA')}"></p>
-                                                <a href="#" class="remove"><img src="images/remove.png" alt="remove"></a>
+                                                <p class="price" th:utext="${#numbers.formatDecimal(cartLineInfo.product.price,3,2,'COMMA')}"></p>
+                                                <a href="#" class="remove"><img src="/images/remove.png" alt="remove"></a>
                                             </div>
                                         </div>
                                     </li>
-                                    <li><span class="total">Total <strong ><span th:utext="${#numbers.formatDecimal(cartLineInfo.amount,3,2,'COMMA')}"></span></strong></span><button class="checkout" onClick="location.href='checkout.html'">CheckOut</button></li>
+                                    <li><span class="total">Total <strong ><span th:utext="${cartForm.amount}"></span><sup>€</sup></strong></span><button class="checkout" onClick="location.href='checkout.html'">CheckOut</button></li>
                                 </th:block>
-                                <th:block th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
+                                <th:block th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
                                     <span>There is no items in Cart</span>
                                 </th:block>
                             </ul>

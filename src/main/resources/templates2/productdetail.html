@@ -26,35 +26,17 @@
               <div class="products-details">
                 <div class="preview_image">
                   <div class="preview-small">
-                    <img id="zoom_03" src="/images/products/medium/products-01.jpg" data-zoom-image="/images/products/Large/products-01.jpg" alt="">
+                    <img id="zoom_03" th:src=@{|/image?id=${productInfo.profilImageId}|} data-zoom-image=${productInfo.productImages.} alt="">
                   </div>
                   <div class="thum-image">
                     <ul id="gallery_01" class="prev-thum">
+                      <th:block th:each="imageId:${productInfo.productImageIds}">
                       <li>
-                        <a href="#" data-image="images/products/medium/products-01.jpg" data-zoom-image="images/products/Large/products-01.jpg">
-                          <img src="images/products/thum/products-01.png" alt="">
+                        <a href="#" data-image="/images/products/medium/products-01.jpg" data-zoom-image="/images/products/Large/products-01.jpg">
+                          <img th:src=@{|/image?id=${imageId}|} alt="">
                         </a>
                       </li>
-                      <li>
-                        <a href="#" data-image="images/products/medium/products-02.jpg" data-zoom-image="images/products/Large/products-02.jpg">
-                          <img src="images/products/thum/products-02.png" alt="">
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" data-image="images/products/medium/products-03.jpg" data-zoom-image="images/products/Large/products-03.jpg">
-                          <img src="images/products/thum/products-03.png" alt="">
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" data-image="images/products/medium/products-04.jpg" data-zoom-image="images/products/Large/products-04.jpg">
-                          <img src="images/products/thum/products-04.png" alt="">
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#" data-image="images/products/medium/products-05.jpg" data-zoom-image="images/products/Large/products-05.jpg">
-                          <img src="images/products/thum/products-05.png" alt="">
-                        </a>
-                      </li>
+                      </th:block>
                     </ul>
                     <a class="control-left" id="thum-prev" href="javascript:void(0);">
                       <i class="fa fa-chevron-left">
@@ -67,7 +49,7 @@
                   </div>
                 </div>
                 <div class="products-description">
-                  <h5 class="name"  th:text="${product.name}">
+                  <h5 class="name"  th:text="${productInfo.product.name}">
                     Lincoln Corner Unit Products
                   </h5>
                   <p>
@@ -82,22 +64,16 @@
                       In Stock
                     </span>
                   </p>
-                  <p>
+                  <p th:text="${productInfo.product.description}">
                     Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrie ces posuere cubilia curae. Proin lectus ipsum, gravida etds mattis vulps utate, tristique ut lectus. Sed et lorem nunc...
                   </p>
                   <hr class="border">
                   <div class="price">
                     Price : 
                     <span class="new_price">
-                      <span th:text="${product.price}">450.00</span>>
+                      <span th:text="${productInfo.product.price}">450.00</span>
                       <sup>
-                        $
-                      </sup>
-                    </span>
-                    <span class="old_price">
-                      450.00
-                      <sup>
-                        $
+                        €
                       </sup>
                     </span>
                   </div>
@@ -112,7 +88,7 @@
                       </select>
                     </div>
                     <div class="button_group">
-                      <button class="button" >
+                      <button class="button" th:onclick="'addToCart('+${productInfo.product.id}+')'">
                         Add To Cart
                       </button>
                       <button class="button compare">
@@ -127,12 +103,17 @@
                         <i class="fa fa-envelope-o">
                         </i>
                       </button>
+                      <!--<th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">-->
+                      <a th:href="@{|/admin/editproduct/${productInfo.product.id}|}" class="btn btn-info btn-lg">
+                        <span class="glyphicon glyphicon-edit"></span> Edit
+                      </a>
+                      <!--</th:block>-->
                     </div>
                   </div>
                   <div class="clearfix">
                   </div>
                   <hr class="border">
-                  <img src="images/share.png" alt="" class="pull-right">
+                  <img src="/images/share.png" alt="" class="pull-right">
                 </div>
               </div>
               <div class="clearfix">
@@ -141,7 +122,7 @@
                 <div id="tabnav">
                   <ul>
                     <li>
-                      <a href="#Descraption">
+                      <a href="#description" >
                         DESCRIPTION
                       </a>
                     </li>
@@ -158,7 +139,7 @@
                   </ul>
                 </div>
                 <div class="tab-content-wrap">
-                  <div class="tab-content" id="Descraption">
+                  <div class="tab-content" id="description" th:text="${productInfo.product.description}">
                     <p>
                       Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultri ces posuere cubilia curae Aenean eleifend laoreet congue. Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibu um ante ipsum primis in faucibus orci luctus et ultri ces posuere cubilia curae Aenean eleifend laoreet congue. Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultri ces posuere cubilia curae Aenean eleifend laoreet congue. Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultri ces posuere cubilia curae...
                     </p>
@@ -385,7 +366,7 @@
                             - %20
                           </div>
                           <div class="thumbnail">
-                            <img src="images/products/small/products-01.png" alt="Product Name">
+                            <img src="/images/products/small/products-01.png" alt="Product Name">
                           </div>
                           <div class="productname">
                             Iphone 5s Gold 32 Gb 2013
@@ -935,6 +916,7 @@
       <th:block th:include="_footer"></th:block>
     </div>
     <!-- Bootstrap core JavaScript==================================================-->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" th:src="@{/js/jquery-1.10.2.min.js}">
     </script>
     <script type="text/javascript"th:src="@{/js/jquery.easing.1.3.js}">
@@ -948,6 +930,8 @@
     <script type="text/javascript" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}">
     </script>
     <script type="text/javascript" th:src="@{/js/script.min.js}" >
+    </script>
+    <script type="text/javascript" th:src="@{/js/minshop.js}">
     </script>
   </body>
 </html>

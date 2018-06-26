@@ -2,9 +2,12 @@ package com.lam.eshopv2.controller;
 
 import com.lam.eshopv2.entity.Customer;
 import com.lam.eshopv2.entity.Product;
+import com.lam.eshopv2.entity.ProductImage;
 import com.lam.eshopv2.form.CustomerForm;
 import com.lam.eshopv2.model.CartInfo;
+import com.lam.eshopv2.model.ProductInfo;
 import com.lam.eshopv2.repository.CategoryRepository;
+import com.lam.eshopv2.repository.ProductImageRepository;
 import com.lam.eshopv2.repository.ProductRepository;
 import com.lam.eshopv2.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,27 +63,57 @@ public class MainController {
     ProductRepository productRepository;
 
     @Autowired
+    ProductImageRepository productImageRepository;
+
+    @Autowired
     CategoryRepository categoryRepository;
 
 
+    @ModelAttribute("hotProducts")
+    public List<ProductInfo> hotProducts() {
+        List<ProductInfo> productInfos=new ArrayList<>();
+        productRepository.findProductsByCategory("HOT").stream().forEach(product ->productInfos.add(fromProduct(product)));
+        return productInfos;
+    }
+
+    ProductInfo fromProduct(Product product){
+        ProductInfo productInfo=new ProductInfo();
+        productInfo.setProduct(product);
+        List<Integer> imageIds= new ArrayList<>();
+        productImageRepository.findProductImagesByProduct(product).stream().forEach(image->imageIds.add(image.getId()));
+        productInfo.setProductImageIds(imageIds);
+        ProductImage profil = productImageRepository.findProfilByProduct(product.getId());
+        if(profil!=null)productInfo.setProfilImageId(profil.getId());
+
+        return productInfo;
+    }
+
     @RequestMapping("/product/{id}")
-    public String product(@PathVariable Integer id, Model model){
+    public String product(HttpServletRequest request,@PathVariable Integer id, Model model){
         System.out.print("get product id "+ id);
         Product product = productRepository.findProductById(id);
-        model.addAttribute("product", product);
+        ProductInfo productInfo=null;
+        if(product!=null){
+            productInfo=fromProduct(product);
+        }
+        productInfo.setProductImages(productImageRepository.findProductImagesByProduct(product));
+        model.addAttribute("productInfo", productInfo);
+        model.addAttribute("cartForm", Utils.getCartInSession(request));
 
         return "productdetail";
     }
 
     @RequestMapping(value = "/products",method = RequestMethod.GET)
-    public String productsList(Model model, //
+    public String productsList(HttpServletRequest request,Model model, //
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "type", defaultValue = "list") String type){
         /*pagination style 1 */
         System.out.print("Hello all product");
         final int product_count=productRepository.countProducts();
         final int max_cout_of_page = 12;
-        List<Product> products = productRepository.paginationProduct(max_cout_of_page,max_cout_of_page*(page-1));
+        List<ProductInfo> productInfos = new ArrayList<>();
+        //List<Product> products =
+        productRepository.paginationProduct(max_cout_of_page,max_cout_of_page*(page-1)).stream().forEach(product -> productInfos.add(fromProduct(product)));
         System.out.println("product count " + product_count + " max_cout_of_page "+max_cout_of_page);
         Integer maxPage=(int)Math.ceil(product_count/(double)max_cout_of_page);
         System.out.println("max page number " + maxPage);
@@ -90,23 +123,27 @@ public class MainController {
         model.addAttribute("listPages", listPages);
         model.addAttribute("maxPage", maxPage);
         model.addAttribute("currentPage", page);
-        model.addAttribute("products", products);
+        model.addAttribute("productInfos", productInfos);
 
-        System.out.print("Product count " + products.size() + " max" + product_count);
+        System.out.print("Product count " + productInfos.size() + " max" + product_count);
         //if(type!="grid") return "products";
         //else
+
+        model.addAttribute("cartForm", Utils.getCartInSession(request));
+
         return "productgrid";
     }
 
     @RequestMapping("/products/{category}")
-    public String productCategoryList(@PathVariable String category, Model model, //
+    public String productCategoryList(HttpServletRequest request,@PathVariable String category, Model model, //
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "type", defaultValue = "list") String type){
         /*pagination style 1 */
         System.out.print("Hello product category");
         final int product_count=productRepository.countProductsByCategory(category);
         final int max_cout_of_page = 12;
-        List<Product> products =productRepository.paginationProductByCategory(category, max_cout_of_page,max_cout_of_page*(page-1));
+        List<ProductInfo> productInfos = new ArrayList<>();
+        productRepository.paginationProductByCategory(category, max_cout_of_page,max_cout_of_page*(page-1)).stream().forEach(product -> productInfos.add(fromProduct(product)));
         System.out.println("product count " + product_count + " max_cout_of_page "+max_cout_of_page);
         Integer maxPage=(int)Math.ceil(product_count/(double)max_cout_of_page);
         System.out.println("max page number " + maxPage);
@@ -116,33 +153,36 @@ public class MainController {
         model.addAttribute("listPages", listPages);
         model.addAttribute("maxPage", maxPage);
         model.addAttribute("currentPage", page);
-        model.addAttribute("products", products);
+        model.addAttribute("productInfos", productInfos);
 
-        System.out.print("Product count " + products.size() + " max" + product_count);
+        System.out.print("Product count " + productInfos.size() + " max" + product_count);
         //if(type!="grid") return "products";
         //else
+        model.addAttribute("cartForm", Utils.getCartInSession(request));
+
         return "productgrid";
     }
 
     @RequestMapping({ "/buyProduct" })
     public String listProductHandler(HttpServletRequest request, Model model, //
-                                     @RequestParam(value = "code", defaultValue = "") String code) {
-
+                                     @RequestParam(value = "id", defaultValue = "") Integer id,
+                                    @RequestParam(value="quantity",defaultValue = "1") Integer quantity) {
         Product product = null;
-        if (code != null && code.length() > 0) {
-            product = productRepository.findProductByCode(code);
+        if (id != null ) {
+            product = productRepository.findProductById(id);
         }
         if (product != null) {
-
+            System.out.print("add to cart product " + product.getId());
             //
             CartInfo cartInfo = Utils.getCartInSession(request);
 
            // ProductInfo productInfo = new ProductInfo(product);
 
-            cartInfo.addProduct(product, 1);
+            cartInfo.addProduct(product, quantity);
         }
-
-        return "redirect:shoppingCart";
+       // return "admin/editproduct::#cart-item-list";
+        model.addAttribute("cartForm", Utils.getCartInSession(request));
+        return "_header::#cart-item-list";
     }
 
     @RequestMapping({ "/shoppingCartRemoveProduct" })

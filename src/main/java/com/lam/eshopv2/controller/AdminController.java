@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.lam.eshopv2.entity.Category;
 import com.lam.eshopv2.entity.Product;
 import com.lam.eshopv2.entity.ProductImage;
+import com.lam.eshopv2.form.CategoryForm;
 import com.lam.eshopv2.form.ImageForm;
 import com.lam.eshopv2.repository.CategoryRepository;
 import com.lam.eshopv2.repository.ProductImageRepository;
@@ -45,6 +46,12 @@ public class AdminController {
     ProductImageRepository productImageRepository;
 
 
+
+    @ModelAttribute("allCategoryNames")
+    public List<String> allCategoryNames() {
+        return categoryRepository.findAllCategoryNames();
+    }
+
     @RequestMapping(value = "/createProduct",method = RequestMethod.GET)
     public String createProduct(Model model){
         return "admin/addproduct";
@@ -54,12 +61,28 @@ public class AdminController {
     public String eidtProduct( @PathVariable Integer id,Model model){
         Product product=productRepository.findProductById(id);
         model.addAttribute("product", product);
+
+        List<String> allCategoryNames=categoryRepository.findAllCategoryNames();
+        model.addAttribute("allCategoryNames",allCategoryNames);
+
         List<Category> categories=categoryRepository.findCategoriesByProduct(product);
         model.addAttribute("categories",categories);
+
+        CategoryForm categoryForm=null;
+        if(product!=null){
+            categoryForm=new CategoryForm();
+            categoryForm.setProduct(product);
+            model.addAttribute("categoryForm",categoryForm);
+        }
         //GALLERY
         List<Integer> imageIds = new ArrayList<>();
         productImageRepository.findProductImagesByProduct(product).stream().forEach(e->imageIds.add(e.getId()));
         model.addAttribute("imageIds",imageIds);
+
+        ImageForm imageForm=new ImageForm();
+        imageForm.setProduct(product);
+        model.addAttribute("imageForm",imageForm);
+
         return "admin/editproduct";
     }
 
@@ -115,14 +138,23 @@ public class AdminController {
         return "admin/editproduct::#product_category_list";
     }
 
-    @RequestMapping(value = "/editproduct/addcategory", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
-    public String addCategory(@RequestBody Category category,Model model) {
-        categoryRepository.save(category);
+    @RequestMapping(value = "/editproduct/{id}/addcategory", method = RequestMethod.POST/*,produces = MediaType.APPLICATION_JSON_VALUE*/)
+    public String addCategory(@RequestBody CategoryForm categoryForm, @PathVariable("id")Integer productId , Model model) {
+
+        Product product= productRepository.findProductById(productId);
+        Arrays.asList(categoryForm.getNames()).stream().forEach(name->{
+            System.out.print(name + " fcc ");
+            Category category = new Category();
+            category.setName(name);
+            category.setProduct(product);
+            categoryRepository.save(category);
+        });
 
         // TODO: retrieve the new value here so you can add it to model map
-        List<Category> categories=categoryRepository.findCategoriesByProduct(category.getProduct());
-        model.addAttribute("categories", categories);
+        List<Category> categories1=categoryRepository.findCategoriesByProduct(product);
+        model.addAttribute("categories", categories1);
 
+        model.addAttribute("allCategoryNames",allCategoryNames());
         // change "myview" to the name of your view
         return "admin/editproduct::#product_category_list";
     }
@@ -144,8 +176,38 @@ public class AdminController {
 
     //UPDATE GALLERY
     @RequestMapping(value = "/editproduct/deleteimage",method = RequestMethod.DELETE)
-    public String deleteProductImage(@RequestParam("imageId") String imageId, ModelMap map)
+    public String deleteProductImage(@RequestParam("imageId") Integer imageId, ModelMap map)
     {
+        ProductImage productImage=productImageRepository.findProductImageById(imageId);
+
+        Product product=productImage.getProduct();
+
+        if(productImage!=null) productImageRepository.delete(productImage);
+
+        //GALLERY
+        List<Integer> imageIds = new ArrayList<>();
+        productImageRepository.findProductImagesByProduct(product).stream().forEach(e->imageIds.add(e.getId()));
+        map.addAttribute("imageIds",imageIds);
+
+        return "admin/editproduct::#product_gallery_list";
+    }
+
+    @RequestMapping(value = "/editproduct/setprofilimage",method = RequestMethod.POST)
+    public String setProductImageAsProfil(@RequestParam("imageId") Integer imageId, ModelMap map)
+    {
+        ProductImage productImage=productImageRepository.findProductImageById(imageId);
+        Product product=productImage.getProduct();
+        ProductImage currentProfil = productImageRepository.findProfilByProduct(product.getId());
+        currentProfil.setType("");
+        productImageRepository.save(currentProfil);
+        productImage.setType("PROFIL");
+        productImageRepository.save(productImage);
+
+        //GALLERY
+        List<Integer> imageIds = new ArrayList<>();
+        productImageRepository.findProductImagesByProduct(product).stream().forEach(e->imageIds.add(e.getId()));
+        map.addAttribute("imageIds",imageIds);
+
         return "admin/editproduct::#product_gallery_list";
     }
 
@@ -154,6 +216,8 @@ public class AdminController {
     {
         Product product=productRepository.findProductById(id);
         Arrays.stream(imageForm.getFileData()).forEach(e->{
+            ProductImage currentProfil = productImageRepository.findProfilByProduct(product.getId());
+
             ProductImage productImage=new ProductImage();
             productImage.setProduct(product);
             try {
@@ -161,6 +225,7 @@ public class AdminController {
                 System.out.print("I am here");
                 if(image!=null) {
                     productImage.setImage(image);
+                    if(currentProfil==null) productImage.setType("PROFIL");
                     productImageRepository.save(productImage);
                 }
             }
@@ -168,7 +233,7 @@ public class AdminController {
                 ex.printStackTrace();
             }
         });
-        return "redirect:admin/editproduct";
+        return "redirect:";
     }
 
 

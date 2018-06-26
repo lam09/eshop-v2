@@ -10,6 +10,22 @@ public class CartLineInfo {
     private Product product;
     private int quantity;
 
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    private double amount=0.00f;
+
+    public Integer getProductImageProfilId() {
+        return productImageProfilId;
+    }
+
+    public void setProductImageProfilId(Integer productImageProfilId) {
+        this.productImageProfilId = productImageProfilId;
+    }
+
+    private Integer productImageProfilId;
+
     public CartLineInfo() {
         this.quantity = 0;
     }

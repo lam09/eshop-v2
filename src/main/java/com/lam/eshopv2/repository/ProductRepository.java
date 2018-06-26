@@ -35,7 +35,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,Produ
     @Query(value="select count(p.*) FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME",nativeQuery = true)
     Integer countProductsByCategory(@Param("CATEGORYNAME")String CATEGORYNAME);
 
-    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME",nativeQuery = true)
+    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=p.id WHERE c.name LIKE :CATEGORYNAME",nativeQuery = true)
     List<Product> findProductsByCategory(@Param("CATEGORYNAME")String CATEGORYNAME);
 
     @Query(value="select p.* FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME " +

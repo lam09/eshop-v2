@@ -15,6 +15,24 @@ public class CartInfo {
 
     private Customer customer;
 
+    public void updateAmount() {
+        amount=0.00f;
+        cartLines.stream().forEach(line->{
+            amount+=line.getQuantity()*line.getProduct().getPrice();
+        });
+    }
+
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    private double amount=0.00f;
+
     private final List<CartLineInfo> cartLines = new ArrayList<CartLineInfo>();
 
     public CartInfo() {
@@ -65,6 +83,7 @@ public class CartInfo {
         } else {
             line.setQuantity(newQuantity);
         }
+        updateAmount();
     }
 
     public void validate() {
@@ -81,6 +100,7 @@ public class CartInfo {
                 line.setQuantity(quantity);
             }
         }
+        updateAmount();
     }
 
     public void removeProduct(Product product) {
@@ -88,6 +108,7 @@ public class CartInfo {
         if (line != null) {
             this.cartLines.remove(line);
         }
+        updateAmount();
     }
 
     public boolean isEmpty() {

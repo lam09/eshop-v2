@@ -3,6 +3,7 @@ package com.lam.eshopv2.repository;
 import com.lam.eshopv2.entity.Category;
 import com.lam.eshopv2.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
     List<Category> findCategoriesByProduct(Product product);
 
     List<Category> findAll();
+
+    @Query(value = "select c.name FROM categories c GROUP BY NAME ",nativeQuery = true)
+    List<String> findAllCategoryNames();
 }

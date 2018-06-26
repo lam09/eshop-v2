@@ -5,20 +5,20 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <link href="css/login.css" rel="stylesheet">
+    <link th:href="@{/css/login.css}" rel="stylesheet">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,700,500italic,100italic,100' rel='stylesheet' type='text/css'>
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
-    <link href="css/sequence-looptheme.css" rel="stylesheet" media="all"/>
-    <link href="css/style.css" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/flexslider.css}" type="text/css" media="screen"/>
+    <link th:href="@{/css/sequence-looptheme.css}" rel="stylesheet" media="all"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body style="height: 100%">
 
 <div class="wrapper" style="height: 100%">
-    <th:block th:include="_header"></th:block>
+    <!--<th:block th:include="_header"></th:block>-->
     <div class="clearfix"></div>
     <div class="container">
     <th:block sec:authorize="!isAuthenticated()">
@@ -127,7 +127,7 @@
 </div>
     <div class="clearfix"></div>
     <div>
-    <th:block th:include="_footer"></th:block>
+    <!--<th:block th:include="_footer"></th:block>-->
     </div>
 </div>
 <script>

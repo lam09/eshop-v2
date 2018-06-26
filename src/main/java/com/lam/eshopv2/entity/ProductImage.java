@@ -14,6 +14,7 @@ public class ProductImage implements Serializable{
 
     @Id
     @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
     @Lob
@@ -23,6 +24,22 @@ public class ProductImage implements Serializable{
     @Lob
     @Column(name = "IMAGE_REDUCED", length = Integer.MAX_VALUE, nullable = true)
     private byte[] image_reduced;
+
+    public byte[] getImage_reduced() {
+        return image_reduced;
+    }
+
+    public void setImage_reduced(byte[] image_reduced) {
+        this.image_reduced = image_reduced;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @Column(name = "TYPE", nullable = true)
     private String type;
