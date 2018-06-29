@@ -1,122 +1,166 @@
-<div class="header"
-     xmlns:th="http://www.thymeleaf.org"
-     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+     class="header">
     <div class="container">
         <div class="row">
             <div class="col-md-2 col-sm-2">
-                <div class="logo"><a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="FlatShop"></a></div>
+                <div class="logo" style="height: 50%;width: 50%"><a th:href="@{/}"><img th:src="@{/images/logo.png}" alt="FlatShop"></a></div>
             </div>
             <div class="col-md-10 col-sm-10">
-                <div>
-                    <div class="header-bar">
-                        <div class="header_top">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="topmenu">
-                                        <li><a href="#">O Minshope</a></li>
-                                        <li><a href="#">Obchodné podmienky</a></li>
-                                        <li><a href="#">Platba</a></li>
-                                        <li><a href="#">Reklamácia</a></li>
-                                        <li><a href="#">Kontakt</a></li>
-                                        <li><a href="#">Podpora</a></li>
-                                    </ul>
+                <div class="header-bar">
+                    <div class="header_top">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <ul class="topmenu">
+                                    <li><a href="#">O Minshope</a></li>
+                                    <li><a href="#">Obchodné podmienky</a></li>
+                                    <li><a href="#">Platba</a></li>
+                                    <li><a href="#">Reklamácia</a></li>
+                                    <li><a href="#">Kontakt</a></li>
+                                    <li><a href="#">Podpora</a></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                                            data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span><span
+                                            class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                                    </button>
                                 </div>
-                                <div class="col-md-6">
-                                    <ul class="usermenu">
-                                        <th:block sec:authorize="isAuthenticated()">
-                                            <li><a th:href="@{/admin/accountInfo}" th:utext="${#request.userPrincipal.name}" class="log">..</a></li>
-                                            &nbsp;|&nbsp;
-                                            <li><a th:href="@{/admin/logout}">Logout</a></li>
+                                <div class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+                                        <li class="active dropdown">
+                                            <a th:href="@{/shop/products}" class="dropdown-toggle" data-toggle="dropdown">CATEGORY</a>
+                                            <div class="dropdown-menu">
+                                                <ul class="mega-menu-links">
+                                                    <li><a th:href="@{/shop/products/WOMEN}">WOMEN</a></li>
+                                                    <li><a th:href="@{/shop/products/MAN}">MAN</a></li>
+                                                    <li><a th:href="@{/shop/products/CHILD}">CHILD</a></li>
+                                                    <li><a th:href="@{/shop/products/SCHOOL}">SCHOOL</a></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li><a th:href="@{/shop/products}">ALL</a></li>
+                                        <li><a th:href="@{/shop/products/HOT}">HOT</a></li>
+                                        <th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">
+                                            <li><a th:href="@{/admin/orderList}">Order List</a></li>
                                         </th:block>
-
-                                        <th:block sec:authorize="!isAuthenticated()">
-                                            <li><a th:href="@{/shop/login}" class="log">Login</a></li>
-                                            <li><a th:href="@{/shop/login#register-form-link}" class="reg">Register</a></li>
-
+                                        <th:block sec:authorize="hasRole('ROLE_MANAGER')">
+                                            <li><a th:href="@{/admin/createProduct}">Create Product</a></li>
                                         </th:block>
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                            <div class="col-md-4">
+                                <ul class="usermenu">
+                                    <th:block sec:authorize="isAuthenticated()">
+                                        <li><a th:href="@{/admin/accountInfo}"
+                                               th:utext="${#request.userPrincipal.name}" class="log">..</a></li>
+                                        &nbsp;|&nbsp;
+                                        <li><a th:href="@{/logout}">Logout</a></li>
+                                    </th:block>
 
-                    </div>
+                                    <th:block sec:authorize="!isAuthenticated()">
+                                        <li><a th:href="@{/shop/login}" class="log">Login</a></li>
+                                        <li><a th:href="@{/shop/login}" class="reg">Register</a></li>
 
-                </div>
-                <div class="clearfix"></div>
-                <div>
-                    <ul class="option">
-                        <li id="search" class="search">
-                            <form><input class="search-submit" type="submit" value=""><input class="search-input" placeholder="Enter your search term..." type="text" value="" name="search"></form>
-                        </li>
-                        <li class="option-cart" id="cart-item-list">
-                            <th:block th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
-                                <a href="#" class="cart-icon">cart <span class="cart_no">0</span></a>
-                            </th:block>
-
-                            <th:block th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
-                            <a href="#" class="cart-icon">cart <span class="cart_no" th:utext="${#lists.size(cartForm.cartLines)}"></span></a>
-                            </th:block>
-
-                            <ul class="option-cart-item" >
-                                <th:block th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
-                                    <li th:each="cartLineInfo, varStatus : ${cartForm.cartLines}">
-                                        <div class="cart-item" >
-                                            <div class="image"><img th:src="@{/images/logo.png}" alt=""></div>
-                                            <div class="item-description">
-                                                <p class="name" th:utext="${cartLineInfo.product.name}"></p>
-                                                <p>Size: <span class="light-red">One size</span><br>Quantity: <span class="light-red" th:value="${cartLineInfo.quantity}"></span></p>
-                                            </div>
-                                            <div class="right">
-                                                <p class="price" th:utext="${#numbers.formatDecimal(cartLineInfo.product.price,3,2,'COMMA')}"></p>
-                                                <a href="#" class="remove"><img src="/images/remove.png" alt="remove"></a>
-                                            </div>
-                                        </div>
+                                    </th:block>
+                                </ul>
+                                <div class="clearfix"></div>
+                                <ul class="option">
+                                    <li id="search" class="search">
+                                        <form><input class="search-submit" type="submit" value=""><input
+                                                class="search-input"
+                                                placeholder="Enter your search term..."
+                                                type="text" value=""
+                                                name="search"></form>
                                     </li>
-                                    <li><span class="total">Total <strong ><span th:utext="${cartForm.amount}"></span><sup>€</sup></strong></span><button class="checkout" onClick="location.href='checkout.html'">CheckOut</button></li>
-                                </th:block>
-                                <th:block th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
-                                    <span>There is no items in Cart</span>
-                                </th:block>
-                            </ul>
-                        </li>
-                    </ul>
+                                    <li class="option-cart" id="cart-item-list">
+                                        <th:block
+                                                th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
+                                            <a href="#" class="cart-icon">cart <span class="cart_no">0</span></a>
+                                        </th:block>
 
-                    <div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li class="active dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home</a>
-                                <div class="dropdown-menu">
-                                    <ul class="mega-menu-links">
-                                        <li><a href="index.html">home</a></li>
-                                        <li><a href="home2.html">home2</a></li>
-                                        <li><a href="home3.html">home3</a></li>
-                                        <li><a href="products.html">Productlitst</a></li>
-                                        <li><a href="productgrid.html">Productgird</a></li>
-                                        <li><a href="productdetail.html">Details</a></li>
-                                        <li><a href="cart.html">Cart</a></li>
-                                        <li><a href="checkout.html">CheckOut</a></li>
-                                        <li><a href="checkout2.html">CheckOut2</a></li>
-                                        <li><a href="contact.html">contact</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li><a href="productgrid.html">Man</a></li>
-                            <li><a href="products.html">Woman</a></li>
-                            <li><a href="/products">All Product</a></li>
-                            <li><a th:href="@{/}">Home</a></li>
-                            <li><a th:href="@{/productList}">Product List</a></li>
-                            <li><a th:href="@{/shoppingCart}">My Cart</a></li>
-                            <th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">
-                                <li><a th:href="@{/admin/orderList}">Order List</a></li>
-                            </th:block>
-                            <th:block sec:authorize="hasRole('ROLE_MANAGER')">
-                                <li><a th:href="@{/admin/createProduct}">Create Product</a></li>
-                            </th:block>
-                        </ul>
+                                        <th:block
+                                                th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
+                                            <a href="#" class="cart-icon">cart <span class="cart_no"
+                                                                                     th:utext="${#lists.size(cartForm.cartLines)}"></span></a>
+                                        </th:block>
+
+                                        <ul class="option-cart-item">
+                                            <th:block
+                                                    th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
+                                                <li th:each="cartLineInfo, varStatus : ${cartForm.cartLines}">
+                                                    <div class="cart-item">
+                                                        <div class="image"><img th:src="@{/images/logo.png}" alt="">
+                                                        </div>
+                                                        <div class="item-description">
+                                                            <p class="name"
+                                                               th:utext="${cartLineInfo.product.name}"></p>
+                                                            <br>Quantity:
+                                                                <span class="light-red" th:text="${cartLineInfo.quantity}"></span>
+                                                            </p>
+                                                        </div>
+                                                        <input hidden="true" type="text" th:id="'product-id-'+${cartLineInfo.product.id}" class="productId" th:value="${cartLineInfo.product.id}"/>
+                                                        <div class="top-right">
+                                                            <p class="price"><span th:utext="${cartLineInfo.product.price}"></span>€</p>
+                                                            <button style="border: transparent;" th:onclick="'removeCartProduct('+${cartLineInfo.product.id}+')'" class="remove"><img src="/images/remove.png" alt="remove"></button>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li><span class="total">Total <strong><span
+                                                        th:utext="${cartForm.amount}"></span>€</strong></span>
+                                                    <button class="checkout"
+                                                            th:onclick="|window.location.href='@{/shop/shoppingCart}'|">
+                                                        CheckOut
+                                                    </button>
+                                                </li>
+                                            </th:block>
+                                            <th:block
+                                                    th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
+                                                <span>There is no items in Cart</span>
+                                            </th:block>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!--<div class="navbar-header">-->
+                    <!--<button type="button" class="navbar-toggle" data-toggle="collapse"-->
+                            <!--data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span><span-->
+                            <!--class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>-->
+                    <!--</button>-->
+                <!--</div>-->
+                <!--<div class="navbar-collapse collapse">-->
+                    <!--<ul class="nav navbar-nav">-->
+                        <!--<li class="active dropdown">-->
+                            <!--<a th:href="@{/shop/products}" class="dropdown-toggle" data-toggle="dropdown">CATEGORY</a>-->
+                            <!--<div class="dropdown-menu">-->
+                                <!--<ul class="mega-menu-links">-->
+                                    <!--<li><a th:href="@{/shop/products/WOMEN}">WOMEN</a></li>-->
+                                    <!--<li><a th:href="@{/shop/products/MAN}">MAN</a></li>-->
+                                    <!--<li><a th:href="@{/shop/products/CHILD}">CHILD</a></li>-->
+                                    <!--<li><a th:href="@{/shop/products/SCHOOL}">SCHOOL</a></li>-->
+                                <!--</ul>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                        <!--<li><a th:href="@{/shop/products}">ALL</a></li>-->
+                        <!--<li><a th:href="@{/shop/products/HOT}">HOT</a></li>-->
+                        <!--<th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">-->
+                            <!--<li><a th:href="@{/admin/orderList}">Order List</a></li>-->
+                        <!--</th:block>-->
+                        <!--<th:block sec:authorize="hasRole('ROLE_MANAGER')">-->
+                            <!--<li><a th:href="@{/admin/createProduct}">Create Product</a></li>-->
+                        <!--</th:block>-->
+                    <!--</ul>-->
+                <!--</div>-->
             </div>
         </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="popupunder alert alert-success fade out"><button type="button" class="close close-sm" data-dismiss="alert"><i class="glyphicon glyphicon-remove"></i></button><strong>Success : </strong> The update process has been completed successfull!</div>
     </div>
 </div>

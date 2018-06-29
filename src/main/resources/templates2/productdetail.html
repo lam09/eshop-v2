@@ -88,7 +88,7 @@
                       </select>
                     </div>
                     <div class="button_group">
-                      <button class="button" th:onclick="'addToCart('+${productInfo.product.id}+')'">
+                      <button class="button" th:onclick="'addToCart('+${productInfo.product.id}+',\''+${productInfo.product.name}+'\')'" >
                         Add To Cart
                       </button>
                       <button class="button compare">

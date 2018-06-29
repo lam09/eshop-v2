@@ -18,6 +18,7 @@ public class Order implements Serializable {
 
     @Id
     @Column(name = "ID", length = 50)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column(name = "ORDER_DATE", nullable = false)
@@ -47,6 +48,18 @@ public class Order implements Serializable {
     @Column(name = "CUSTOMER_PHONE", length = 128, nullable = false)
     private String customerPhone;
 
+    @OneToOne
+    @JoinColumn(name = "ACCOUNT_ID", nullable = true) //
+    private Account account;
+
+    @ManyToOne
+    @JoinColumn(name = "SHIPPING_METHOD_ID", nullable = true) //
+    private ShippingMethod shippingMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "PAYMENT_METHOD_ID", nullable = true) //
+    private PaymentMethod paymentMethod;
+
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;
     }
@@ -55,7 +68,8 @@ public class Order implements Serializable {
         this.orderDetails = orderDetails;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
     public String getId() {

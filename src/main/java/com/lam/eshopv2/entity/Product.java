@@ -24,15 +24,7 @@ public class Product implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-/*
-    public Set<Property> getProperties() {
-        return properties;
-    }
 
-    public void setProperties(Set<Property> properties) {
-        this.properties = properties;
-    }
-*/
     @Id
     @Column(name = "ID", length = 20, nullable = false)
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -57,9 +49,40 @@ public class Product implements Serializable {
     @Column(name = "DESCRIPTION",length = Integer.MAX_VALUE,nullable = true)
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<ProductImage> productImages;
 
+    public ProductImage getProfil() {
+        return profil;
+    }
+
+    public void setProfil(ProductImage profil) {
+        this.profil = profil;
+    }
+
+    private ProductImage profil;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Property> properties;
+
+    public List<Property> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
+    }
+
+    public List<Variant> getVariants() {
+        return variants;
+    }
+
+    public void setVariants(List<Variant> variants) {
+        this.variants = variants;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Variant> variants;
 /*
     public List<Category> getCategories() {
         return categories;

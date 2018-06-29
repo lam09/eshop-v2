@@ -61,7 +61,7 @@
 
                     <tr th:each="order : ${orders}">
                         <td th:text="${order.orderId}"></td>
-                        <td th:text="${order.customer.firstName + ' ' + order.customer.lastName}"></td>
+                        <td th:text="${order.shippingAddressInfo.firstName + ' ' + order.shippingAddressInfo.lastName}"></td>
                         <td>
                             <table>
                                 <tr th:each="product :${order.products}">

@@ -1,972 +1,322 @@
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns="http://www.w3.org/1999/xhtml"
 >
 <head>
-  <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="images/favicon.png">
-  <title>Welcome to MinShop</title>
-  <link href="css/bootstrap.css" rel="stylesheet">
-  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,700,500italic,100italic,100' rel='stylesheet' type='text/css'>
-  <link href="css/font-awesome.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen"/>
-  <link href="css/sequence-looptheme.css" rel="stylesheet" media="all"/>
-  <link href="css/style.css" rel="stylesheet">
-  <!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script><![endif]-->
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/favicon.png">
+    <title>Welcome to MinShop</title>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,700,500italic,100italic,100'
+          rel='stylesheet' type='text/css'>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/flexslider.css}" type="text/css" media="screen"/>
+    <link th:href="@{/css/sequence-looptheme.css}" rel="stylesheet" media="all"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script><![endif]-->
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link th:href="@{/css/cart.css}" rel="stylesheet">
+    <link th:href="@{/css/addToCart.css}" rel="stylesheet">
+
 </head>
-  <body>
-    <div class="wrapper">
-      <div class="header">
+<body>
+<div class="wrapper">
+    <th:block th:include="_header"></th:block>
+    <div class="clearfix">
+    </div>
+    <div class="container_fullwidth">
+        <div class="row cart-head">
+            <div class="container">
+                <div class="row">
+                    <p></p>
+                </div>
+                <div class="row">
+                    <div style="display: table; margin: auto;">
+                        <span class="step step_complete"> <a href="#" class="check-bc">Cart</a> <span
+                                class="step_line step_complete"> </span> <span
+                                class="step_line backline"> </span> </span>
+                        <span class="step step_complete"> <a href="#" class="check-bc">Checkout</a> <span
+                                class="step_line "> </span> <span class="step_line step_complete"> </span> </span>
+                        <span class="step_thankyou check-bc step_complete">Thank you</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <p></p>
+                </div>
+            </div>
+        </div>
         <div class="container">
-          <div class="row">
-            <div class="col-md-2 col-sm-2">
-              <div class="logo">
-                <a href="index.html">
-                  <img src="images/logo.png" alt="FlatShop">
-                </a>
-              </div>
-            </div>
-            <div class="col-md-10 col-sm-10">
-              <th:block th:include="_header"></th:block>
-              <div class="clearfix"></div>
-              <th:block th:include="_menu"></th:block>
-            </div>
-          </div>
-        </div>
-        <div class="clearfix">
-        </div>
-        <div class="page-index">
-          <div class="container">
-            <p>
-              Home - Shopping Cart
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="clearfix">
-      </div>
-      <div class="container_fullwidth">
-        <div class="container shopping-cart">
-          <div class="row">
-            <div class="col-md-12">
-              <h3 class="title">
-                Shopping Cart
-              </h3>
-              <div class="clearfix">
-              </div>
-              <table class="shop-table">
+            <table id="cart" class="table table-hover table-condensed">
                 <thead>
-                  <tr>
-                    <th>
-                      Image
-                    </th>
-                    <th>
-                      Dtails
-                    </th>
-                    <th>
-                      Price
-                    </th>
-                    <th>
-                      Quantity
-                    </th>
-                    <th>
-                      Price
-                    </th>
-                    <th>
-                      Delete
-                    </th>
-                  </tr>
+                <tr>
+                    <th style="width:50%">Product</th>
+                    <th style="width:10%">Price</th>
+                    <th style="width:8%">Quantity</th>
+                    <th style="width:22%" class="text-center">Subtotal</th>
+                    <th style="width:10%"></th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <img src="images/products/small/products-06.png" alt="">
-                    </td>
-                    <td>
-                      <div class="shop-details">
-                        <div class="productname">
-                          Lincoln Corner Unit Products
-                        </div>
-                        <p>
-                          <img alt="" src="images/star.png">
-                          <a class="review_num" href="#">
-                            02 Review(s)
-                          </a>
-                        </p>
-                        <div class="color-choser">
-                          <span class="text">
-                            Product Color : 
-                          </span>
-                          <ul>
-                            <li>
-                              <a class="black-bg " href="#">
-                                black
-                              </a>
-                            </li>
-                            <li>
-                              <a class="red-bg" href="#">
-                                light red
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <p>
-                          Product Code : 
-                          <strong class="pcode">
-                            Dress 120
-                          </strong>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <h5>
-                        $200.00
-                      </h5>
-                    </td>
-                    <td>
-                      <select name="">
-                        <option selected value="1">
-                          1
-                        </option>
-                        <option value="1">
-                          2
-                        </option>
-                        <option value="1">
-                          3
-                        </option>
-                      </select>
-                    </td>
-                    <td>
-                      <h5>
-                        <strong class="red">
-                          $200.00
-                        </strong>
-                      </h5>
-                    </td>
-                    <td>
-                      <a href="#">
-                        <img src="images/remove.png" alt="">
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <img src="images/products/small/products-02.png" alt="">
-                    </td>
-                    <td>
-                      <div class="shop-details">
-                        <div class="productname">
-                          Lincoln Corner Unit Products
-                        </div>
-                        <p>
-                          <img alt="" src="images/star.png">
-                          <a class="review_num" href="#">
-                            02 Review(s)
-                          </a>
-                        </p>
-                        <div class="color-choser">
-                          <span class="text">
-                            Product Color : 
-                          </span>
-                          <ul>
-                            <li>
-                              <a class="gray-bg" href="#">
-                                pink
-                              </a>
-                            </li>
-                            <li>
-                              <a class="black-bg " href="#">
-                                black
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <p>
-                          Product Code : 
-                          <strong class="pcode">
-                            Dress 132
-                          </strong>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <h5>
-                        $200.00
-                      </h5>
-                    </td>
-                    <td>
-                      <select name="">
-                        <option selected value="1">
-                          1
-                        </option>
-                        <option value="2">
-                          2
-                        </option>
-                        <option value="3">
-                          3
-                        </option>
-                      </select>
-                    </td>
-                    <td>
-                      <h5>
-                        <strong class="red">
-                          $200.00
-                        </strong>
-                      </h5>
-                    </td>
-                    <td>
-                      <a href="#">
-                        <img src="images/remove.png" alt="">
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <img src="images/products/small/products-05.png" alt="">
-                    </td>
-                    <td>
-                      <div class="shop-details">
-                        <div class="productname">
-                          Lincoln Corner Unit Products
-                        </div>
-                        <p>
-                          <img alt="" src="images/star.png">
-                          <a class="review_num" href="#">
-                            02 Review(s)
-                          </a>
-                        </p>
-                        <div class="color-choser">
-                          <span class="text">
-                            Product Color : 
-                          </span>
-                          <ul>
-                            <li>
-                              <a class="red-bg" href="#">
-                                light red
-                              </a>
-                            </li>
-                            <li>
-                              <a class=" yellow-bg" href="#">
-                                yellow"
-                              </a>
-                            </li>
-                            <li>
-                              <a class="black-bg " href="#">
-                                black
-                              </a>
-                            </li>
-                            <li>
-                              <a class="pink-bg" href="#">
-                                pink
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                        <p>
-                          Product Code : 
-                          <strong class="pcode">
-                            Dress 050
-                          </strong>
-                        </p>
-                      </div>
-                    </td>
-                    <td>
-                      <h5>
-                        $200.00
-                      </h5>
-                    </td>
-                    <td>
-                      <select name="">
-                        <option selected value="1">
-                          1
-                        </option>
-                        <option value="2">
-                          2
-                        </option>
-                        <option value="3">
-                          3
-                        </option>
-                      </select>
-                    </td>
-                    <td>
-                      <h5>
-                        <strong class="red">
-                          $200.00
-                        </strong>
-                      </h5>
-                    </td>
-                    <td>
-                      <a href="#">
-                        <img src="images/remove.png" alt="">
-                      </a>
-                    </td>
-                  </tr>
+                <th:block
+                        th:if="${cartForm != null && cartForm.cartLines != null && !cartForm.cartLines.empty}">
+                    <th:block th:each="cartLineInfo, varStatus : ${cartForm.cartLines}">
+                        <tr>
+                            <td data-th="Product">
+                                <div class="row">
+                                    <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..."
+                                                                         class="img-responsive"/></div>
+                                    <div class="col-sm-10">
+                                        <h4 class="nomargin" th:utext="${cartLineInfo.product.name}">Product 1</h4>
+                                        <p th:utext="${cartLineInfo.product.description}">Quis aute iure reprehenderit
+                                            in voluptate velit esse cillum dolore eu fugiat
+                                            nulla pariatur. Lorem ipsum dolor sit amet.</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <!--<td data-th="product_id" hidden="true">-->
+                                <!--<input type="text" th:id="'product-id-'+${cartLineInfo.product.id}" class="productId" th:value="${cartLineInfo.product.id}"/>-->
+                            <!--</td>-->
+
+                            <td data-th="Price"><span th:utext="${cartLineInfo.product.price}"></span>€</td>
+                            <td data-th="Quantity" class="text-center" >
+                                <input type="number" class="form-control text-center" th:id="'product-quantity-'+${cartLineInfo.product.id}" th:value="${cartLineInfo.quantity}">
+                            </td>
+                            <td data-th="Subtotal" class="text-center"><span th:utext="${cartLineInfo.amount}"></span>€
+                            </td>
+                            <td class="actions" data-th="">
+                                <button class="btn btn-info btn-sm" th:onclick="'updateCartProductQuantity('+${cartLineInfo.product.id}+')'"><i class="fa fa-refresh"></i></button>
+                                <button class="btn btn-danger btn-sm" th:onclick="'removeCartProduct('+${cartLineInfo.product.id}+')'"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    </th:block>
+                </th:block>
                 </tbody>
                 <tfoot>
-                  <tr>
-                    <td colspan="6">
-                      <button class="pull-left">
-                        Continue Shopping
-                      </button>
-                      <button class=" pull-right">
-                        Update Shopping Cart
-                      </button>
+                <tr class="visible-xs">
+                    <td class="text-center" th:text="${cartForm.amount}"><strong>Total 1.99</strong></td>
+                </tr>
+                <tr>
+                    <td><a th:href="@{/}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue
+                        Shopping</a></td>
+                    <td colspan="2" class="hidden-xs"></td>
+                    <td class="hidden-xs text-center"><strong>Total<span th:text="${cartForm.amount}"></span></strong></td>
+                    <td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a>
                     </td>
-                  </tr>
+                </tr>
                 </tfoot>
-              </table>
-              <div class="clearfix">
-              </div>
-              <div class="row">
-                <div class="col-md-4 col-sm-6">
-                  <div class="shippingbox">
-                    <h5>
-                      Estimate Shipping And Tax
-                    </h5>
-                    <form>
-                      <label>
-                        Select Country *
-                      </label>
-                      <select class="">
-                        <option value="AL">
-                          Alabama
-                        </option>
-                        <option value="AK">
-                          Alaska
-                        </option>
-                        <option value="AZ">
-                          Arizona
-                        </option>
-                        <option value="AR">
-                          Arkansas
-                        </option>
-                        <option value="CA">
-                          California
-                        </option>
-                        <option value="CO">
-                          Colorado
-                        </option>
-                        <option value="CT">
-                          Connecticut
-                        </option>
-                        <option value="DE">
-                          Delaware
-                        </option>
-                        <option value="DC">
-                          District Of Columbia
-                        </option>
-                        <option value="FL">
-                          Florida
-                        </option>
-                        <option value="GA">
-                          Georgia
-                        </option>
-                        <option value="HI">
-                          Hawaii
-                        </option>
-                        <option value="ID">
-                          Idaho
-                        </option>
-                        <option selected="" value="IL">
-                          Illinois
-                        </option>
-                        <option value="IN">
-                          Indiana
-                        </option>
-                        <option value="IA">
-                          Iowa
-                        </option>
-                        <option value="KS">
-                          Kansas
-                        </option>
-                        <option value="KY">
-                          Kentucky
-                        </option>
-                        <option value="LA">
-                          Louisiana
-                        </option>
-                        <option value="ME">
-                          Maine
-                        </option>
-                        <option value="MD">
-                          Maryland
-                        </option>
-                        <option value="MA">
-                          Massachusetts
-                        </option>
-                        <option value="MI">
-                          Michigan
-                        </option>
-                        <option value="MN">
-                          Minnesota
-                        </option>
-                        <option value="MS">
-                          Mississippi
-                        </option>
-                        <option value="MO">
-                          Missouri
-                        </option>
-                        <option value="MT">
-                          Montana
-                        </option>
-                        <option value="NE">
-                          Nebraska
-                        </option>
-                        <option value="NV">
-                          Nevada
-                        </option>
-                        <option value="NH">
-                          New Hampshire
-                        </option>
-                        <option value="NJ">
-                          New Jersey
-                        </option>
-                        <option value="NM">
-                          New Mexico
-                        </option>
-                        <option value="NY">
-                          New York
-                        </option>
-                        <option value="NC">
-                          North Carolina
-                        </option>
-                        <option value="ND">
-                          North Dakota
-                        </option>
-                        <option value="OH">
-                          Ohio
-                        </option>
-                        <option value="OK">
-                          Oklahoma
-                        </option>
-                        <option value="OR">
-                          Oregon
-                        </option>
-                        <option value="PA">
-                          Pennsylvania
-                        </option>
-                        <option value="RI">
-                          Rhode Island
-                        </option>
-                        <option value="SC">
-                          South Carolina
-                        </option>
-                        <option value="SD">
-                          South Dakota
-                        </option>
-                        <option value="TN">
-                          Tennessee
-                        </option>
-                        <option value="TX">
-                          Texas
-                        </option>
-                        <option value="UT">
-                          Utah
-                        </option>
-                        <option value="VT">
-                          Vermont
-                        </option>
-                        <option value="VA">
-                          Virginia
-                        </option>
-                        <option value="WA">
-                          Washington
-                        </option>
-                        <option value="WV">
-                          West Virginia
-                        </option>
-                        <option value="WI">
-                          Wisconsin
-                        </option>
-                        <option value="WY">
-                          Wyoming
-                        </option>
-                      </select>
-                      <label>
-                        State / Province *
-                      </label>
-                      <select class="">
-                        <option value="AL">
-                          Alabama
-                        </option>
-                        <option value="AK">
-                          Alaska
-                        </option>
-                        <option value="AZ">
-                          Arizona
-                        </option>
-                        <option value="AR">
-                          Arkansas
-                        </option>
-                        <option value="CA">
-                          California
-                        </option>
-                        <option value="CO">
-                          Colorado
-                        </option>
-                        <option value="CT">
-                          Connecticut
-                        </option>
-                        <option value="DE">
-                          Delaware
-                        </option>
-                        <option value="DC">
-                          District Of Columbia
-                        </option>
-                        <option value="FL">
-                          Florida
-                        </option>
-                        <option value="GA">
-                          Georgia
-                        </option>
-                        <option value="HI">
-                          Hawaii
-                        </option>
-                        <option value="ID">
-                          Idaho
-                        </option>
-                        <option selected="" value="IL">
-                          Illinois
-                        </option>
-                        <option value="IN">
-                          Indiana
-                        </option>
-                        <option value="IA">
-                          Iowa
-                        </option>
-                        <option value="KS">
-                          Kansas
-                        </option>
-                        <option value="KY">
-                          Kentucky
-                        </option>
-                        <option value="LA">
-                          Louisiana
-                        </option>
-                        <option value="ME">
-                          Maine
-                        </option>
-                        <option value="MD">
-                          Maryland
-                        </option>
-                        <option value="MA">
-                          Massachusetts
-                        </option>
-                        <option value="MI">
-                          Michigan
-                        </option>
-                        <option value="MN">
-                          Minnesota
-                        </option>
-                        <option value="MS">
-                          Mississippi
-                        </option>
-                        <option value="MO">
-                          Missouri
-                        </option>
-                        <option value="MT">
-                          Montana
-                        </option>
-                        <option value="NE">
-                          Nebraska
-                        </option>
-                        <option value="NV">
-                          Nevada
-                        </option>
-                        <option value="NH">
-                          New Hampshire
-                        </option>
-                        <option value="NJ">
-                          New Jersey
-                        </option>
-                        <option value="NM">
-                          New Mexico
-                        </option>
-                        <option value="NY">
-                          New York
-                        </option>
-                        <option value="NC">
-                          North Carolina
-                        </option>
-                        <option value="ND">
-                          North Dakota
-                        </option>
-                        <option value="OH">
-                          Ohio
-                        </option>
-                        <option value="OK">
-                          Oklahoma
-                        </option>
-                        <option value="OR">
-                          Oregon
-                        </option>
-                        <option value="PA">
-                          Pennsylvania
-                        </option>
-                        <option value="RI">
-                          Rhode Island
-                        </option>
-                        <option value="SC">
-                          South Carolina
-                        </option>
-                        <option value="SD">
-                          South Dakota
-                        </option>
-                        <option value="TN">
-                          Tennessee
-                        </option>
-                        <option value="TX">
-                          Texas
-                        </option>
-                        <option value="UT">
-                          Utah
-                        </option>
-                        <option value="VT">
-                          Vermont
-                        </option>
-                        <option value="VA">
-                          Virginia
-                        </option>
-                        <option value="WA">
-                          Washington
-                        </option>
-                        <option value="WV">
-                          West Virginia
-                        </option>
-                        <option value="WI">
-                          Wisconsin
-                        </option>
-                        <option value="WY">
-                          Wyoming
-                        </option>
-                      </select>
-                      <label>
-                        Zip / Post Code *
-                      </label>
-                      <select class="">
-                        <option value="AL">
-                          Alabama
-                        </option>
-                        <option value="AK">
-                          Alaska
-                        </option>
-                        <option value="AZ">
-                          Arizona
-                        </option>
-                        <option value="AR">
-                          Arkansas
-                        </option>
-                        <option value="CA">
-                          California
-                        </option>
-                        <option value="CO">
-                          Colorado
-                        </option>
-                        <option value="CT">
-                          Connecticut
-                        </option>
-                        <option value="DE">
-                          Delaware
-                        </option>
-                        <option value="DC">
-                          District Of Columbia
-                        </option>
-                        <option value="FL">
-                          Florida
-                        </option>
-                        <option value="GA">
-                          Georgia
-                        </option>
-                        <option value="HI">
-                          Hawaii
-                        </option>
-                        <option value="ID">
-                          Idaho
-                        </option>
-                        <option selected="" value="IL">
-                          Illinois
-                        </option>
-                        <option value="IN">
-                          Indiana
-                        </option>
-                        <option value="IA">
-                          Iowa
-                        </option>
-                        <option value="KS">
-                          Kansas
-                        </option>
-                        <option value="KY">
-                          Kentucky
-                        </option>
-                        <option value="LA">
-                          Louisiana
-                        </option>
-                        <option value="ME">
-                          Maine
-                        </option>
-                        <option value="MD">
-                          Maryland
-                        </option>
-                        <option value="MA">
-                          Massachusetts
-                        </option>
-                        <option value="MI">
-                          Michigan
-                        </option>
-                        <option value="MN">
-                          Minnesota
-                        </option>
-                        <option value="MS">
-                          Mississippi
-                        </option>
-                        <option value="MO">
-                          Missouri
-                        </option>
-                        <option value="MT">
-                          Montana
-                        </option>
-                        <option value="NE">
-                          Nebraska
-                        </option>
-                        <option value="NV">
-                          Nevada
-                        </option>
-                        <option value="NH">
-                          New Hampshire
-                        </option>
-                        <option value="NJ">
-                          New Jersey
-                        </option>
-                        <option value="NM">
-                          New Mexico
-                        </option>
-                        <option value="NY">
-                          New York
-                        </option>
-                        <option value="NC">
-                          North Carolina
-                        </option>
-                        <option value="ND">
-                          North Dakota
-                        </option>
-                        <option value="OH">
-                          Ohio
-                        </option>
-                        <option value="OK">
-                          Oklahoma
-                        </option>
-                        <option value="OR">
-                          Oregon
-                        </option>
-                        <option value="PA">
-                          Pennsylvania
-                        </option>
-                        <option value="RI">
-                          Rhode Island
-                        </option>
-                        <option value="SC">
-                          South Carolina
-                        </option>
-                        <option value="SD">
-                          South Dakota
-                        </option>
-                        <option value="TN">
-                          Tennessee
-                        </option>
-                        <option value="TX">
-                          Texas
-                        </option>
-                        <option value="UT">
-                          Utah
-                        </option>
-                        <option value="VT">
-                          Vermont
-                        </option>
-                        <option value="VA">
-                          Virginia
-                        </option>
-                        <option value="WA">
-                          Washington
-                        </option>
-                        <option value="WV">
-                          West Virginia
-                        </option>
-                        <option value="WI">
-                          Wisconsin
-                        </option>
-                        <option value="WY">
-                          Wyoming
-                        </option>
-                      </select>
-                      <div class="clearfix">
-                      </div>
-                      <button>
-                        Get A Qoute
-                      </button>
-                    </form>
-                  </div>
-                </div>
-                <div class="col-md-4 col-sm-6">
-                  <div class="shippingbox">
-                    <h5>
-                      Discount Codes
-                    </h5>
-                    <form>
-                      <label>
-                        Enter your coupon code if you have one
-                      </label>
-                      <input type="text" name="">
-                      <div class="clearfix">
-                      </div>
-                      <button>
-                        Get A Qoute
-                      </button>
-                    </form>
-                  </div>
-                </div>
-                <div class="col-md-4 col-sm-6">
-                  <div class="shippingbox">
-                    <div class="subtotal">
-                      <h5>
-                        Sub Total
-                      </h5>
-                      <span>
-                        $1.000.00
-                      </span>
-                    </div>
-                    <div class="grandtotal">
-                      <h5>
-                        GRAND TOTAL 
-                      </h5>
-                      <span>
-                        $1.000.00
-                      </span>
-                    </div>
-                    <button>
-                      Process To Checkout
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="clearfix">
-          </div>
-          <div class="our-brand">
-            <h3 class="title">
-              <strong>
-                Our 
-              </strong>
-              Brands
-            </h3>
-            <div class="control">
-              <a id="prev_brand" class="prev" href="#">
-                &lt;
-              </a>
-              <a id="next_brand" class="next" href="#">
-                &gt;
-              </a>
-            </div>
-            <ul id="braldLogo">
-              <li>
-                <ul class="brand_item">
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/envato.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/themeforest.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/photodune.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/activeden.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/envato.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <ul class="brand_item">
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/envato.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/themeforest.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/photodune.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/activeden.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="brand-logo">
-                        <img src="images/envato.png" alt="">
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+            </table>
         </div>
-      </div>
-      <div class="clearfix">
-      </div>
-      <th:block th:include="_footer"></th:block>
     </div>
-    <!-- Bootstrap core JavaScript==================================================-->
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js">
-    </script>
-    <script type="text/javascript" src="js/bootstrap.min.js">
-    </script>
-    <script defer src="js/jquery.flexslider.js">
-    </script>
-    <script type="text/javascript" src="js/jquery.carouFredSel-6.2.1-packed.js">
-    </script>
-    <script type="text/javascript" src="js/script.min.js" >
-    </script>
-  </body>
+    <div class="container wrapper">
+
+        <div class="row cart-body">
+            <form class="form-horizontal" th:object = "${shippingAddressForm}"  method="post" th:action="@{/shop/shoppingCartCustomer}">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-md-push-6 col-sm-push-6">
+                    <!--SHIPPING METHOD-->
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><h4>Shipping Address</h4></div>
+                        <div class="panel-body" >
+                            <div class="form-group">
+                                <div class="col-md-6 col-xs-12">
+                                    <strong>First Name:</strong>
+                                    <input type="text" name="first_name" class="form-control" value="" th:field="*{firstname}"/>
+                                    <span class="error-message"
+                                          th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">..</span>
+                                </div>
+                                <div class="span1"></div>
+                                <div class="col-md-6 col-xs-12">
+                                    <strong>Last Name:</strong>
+                                    <input type="text" name="last_name" class="form-control" value="" th:field="*{lastname}"/>
+                                    <span class="error-message"
+                                          th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">..</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12"><strong>Address:</strong></div>
+                                <div class="col-md-12">
+                                    <input type="text" name="address" class="form-control" value="" th:field="*{address}"/>
+                                    <span class="error-message"
+                                          th:if="${#fields.hasErrors('address')}" th:errors="*{address}">..</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12"><strong>City:</strong></div>
+                                <div class="col-md-12">
+                                    <input type="text" name="city" class="form-control" value="" th:field="*{city}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12"><strong>Zip / Postal Code:</strong></div>
+                                <div class="col-md-12">
+                                    <input type="text" name="zip_code" class="form-control" value="" th:field="*{postalCode}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12"><strong>Phone Number:</strong></div>
+                                <div class="col-md-12"><input type="text" name="phone_number" class="form-control"
+                                                              value="" th:field="*{phone}"/></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12"><strong>Email Address:</strong></div>
+                                <div class="col-md-12"><input type="text" name="email_address" class="form-control"
+                                                              value="" th:field="*{email}"/></div>
+                            </div>
+                            <div class="form-group">
+                            <input type="submit" value="PLACE ORDER" />
+                            </div>
+                        </div>
+                    </div>
+                    <!--SHIPPING METHOD END-->
+                    <!--CREDIT CART PAYMENT-->
+                    <!--<div class="panel panel-info">-->
+                        <!--<div class="panel-heading"><span><i class="glyphicon glyphicon-lock"></i></span>Payment</div>-->
+                        <!--<div class="panel-body">-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-12"><strong>Card Type:</strong></div>-->
+                                <!--<div class="col-md-12">-->
+                                    <!--<select id="CreditCardType" name="CreditCardType" class="form-control">-->
+                                        <!--<option value="5">Visa</option>-->
+                                        <!--<option value="6">MasterCard</option>-->
+                                        <!--<option value="7">American Express</option>-->
+                                        <!--<option value="8">Discover</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-12"><strong>Credit Card Number:</strong></div>-->
+                                <!--<div class="col-md-12"><input type="text" class="form-control" name="car_number"-->
+                                                              <!--value=""/></div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-12"><strong>Card CVV:</strong></div>-->
+                                <!--<div class="col-md-12"><input type="text" class="form-control" name="car_code"-->
+                                                              <!--value=""/></div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-12">-->
+                                    <!--<strong>Expiration Date</strong>-->
+                                <!--</div>-->
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                    <!--<select class="form-control" name="">-->
+                                        <!--<option value="">Month</option>-->
+                                        <!--<option value="01">01</option>-->
+                                        <!--<option value="02">02</option>-->
+                                        <!--<option value="03">03</option>-->
+                                        <!--<option value="04">04</option>-->
+                                        <!--<option value="05">05</option>-->
+                                        <!--<option value="06">06</option>-->
+                                        <!--<option value="07">07</option>-->
+                                        <!--<option value="08">08</option>-->
+                                        <!--<option value="09">09</option>-->
+                                        <!--<option value="10">10</option>-->
+                                        <!--<option value="11">11</option>-->
+                                        <!--<option value="12">12</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
+                                    <!--<select class="form-control" name="">-->
+                                        <!--<option value="">Year</option>-->
+                                        <!--<option value="2015">2015</option>-->
+                                        <!--<option value="2016">2016</option>-->
+                                        <!--<option value="2017">2017</option>-->
+                                        <!--<option value="2018">2018</option>-->
+                                        <!--<option value="2019">2019</option>-->
+                                        <!--<option value="2020">2020</option>-->
+                                        <!--<option value="2021">2021</option>-->
+                                        <!--<option value="2022">2022</option>-->
+                                        <!--<option value="2023">2023</option>-->
+                                        <!--<option value="2024">2024</option>-->
+                                        <!--<option value="2025">2025</option>-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-12">-->
+                                    <!--<span>Pay secure using your credit card.</span>-->
+                                <!--</div>-->
+                                <!--<div class="col-md-12">-->
+                                    <!--<ul class="cards">-->
+                                        <!--<li class="visa hand">Visa</li>-->
+                                        <!--<li class="mastercard hand">MasterCard</li>-->
+                                        <!--<li class="amex hand">Amex</li>-->
+                                    <!--</ul>-->
+                                    <!--<div class="clearfix"></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
+                                    <!--<button type="submit" class="btn btn-primary btn-submit-fix">PLACE ORDER</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--CREDIT CART PAYMENT END-->
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">SHIPPING CONFIRMATION</div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-md-pull-6 col-sm-pull-6">
+                    <!--REVIEW ORDER-->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            LOGIN
+                        </div>
+                        <div class="panel-body">
+                            <th:block sec:authorize="!isAuthenticated()">
+                                <!-- /login?error=true -->
+                                <th:block
+                                        th:if="${#session != null && #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}">
+                                    <div th:if="${#request.getParameter('error') == 'true'}"
+                                         style="color: red; margin: 10px 0px;">
+                                        Login Failed!!!<br/> Reason :
+                                        <span th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}"></span>
+                                    </div>
+                                </th:block>
+                                <a th:href="@{/shop/authorizedShoppingCart}"> LOGIN</a>
+                            </th:block>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <div class="row">
+                                    Hello
+                                    <a th:href="@{/admin/accountInfo}" th:utext="${#request.userPrincipal.name}">..</a>
+                                    <a th:href="@{/logout}">Logout</a>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                    <!--REVIEW ORDER END-->
+                </div>
+
+            </form>
+        </div>
+        <div class="row cart-footer">
+
+        </div>
+    </div>
+    <div class="clearfix">
+    </div>
+    <th:block th:include="_footer"></th:block>
+</div>
+<!-- Bootstrap core JavaScript==================================================-->
+<script type="text/javascript" th:src="@{/js/jquery-1.10.2.min.js}">
+</script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}">
+</script>
+<script defer th:src="@{/js/jquery.flexslider.js}">
+</script>
+<script type="text/javascript" th:src="@{/js/jquery.carouFredSel-6.2.1-packed.js}">
+</script>
+<script type="text/javascript" th:src="@{/js/script.min.js}">
+</script>
+<script type="text/javascript" th:src="@{/js/minshop.js}">
+</script>
+</body>
 </html>

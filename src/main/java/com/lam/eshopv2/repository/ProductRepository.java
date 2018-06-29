@@ -32,14 +32,16 @@ public interface ProductRepository extends JpaRepository<Product, Integer>,Produ
             "offset :OFFSET",nativeQuery = true)
     List<Product> paginationProduct(@Param("LIMIT") Integer limit,@Param("OFFSET") Integer offset);
 
-    @Query(value="select count(p.*) FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME",nativeQuery = true)
+    @Query(value="select count(*) FROM products p JOIN categories c on c.product_id=p.id WHERE c.name LIKE :CATEGORYNAME ",nativeQuery = true)
     Integer countProductsByCategory(@Param("CATEGORYNAME")String CATEGORYNAME);
 
-    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=p.id WHERE c.name LIKE :CATEGORYNAME",nativeQuery = true)
+    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=p.id WHERE c.name LIKE :CATEGORYNAME ",nativeQuery = true)
     List<Product> findProductsByCategory(@Param("CATEGORYNAME")String CATEGORYNAME);
 
-    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=s.id WHERE c.name LIKE :CATEGORYNAME " +
+    @Query(value="select p.* FROM products p JOIN categories c on c.product_id=p.id WHERE c.name LIKE :CATEGORYNAME " +
             "limit :LIMIT " +
             "offset :OFFSET",nativeQuery = true)
     List<Product> paginationProductByCategory(@Param("CATEGORYNAME")String CATEGORYNAME,@Param("LIMIT") Integer limit,@Param("OFFSET") Integer offset);
+
+
 }

@@ -1,18 +1,15 @@
 package com.lam.eshopv2.controller;
 
-import com.lam.eshopv2.entity.Customer;
-import com.lam.eshopv2.entity.Product;
-import com.lam.eshopv2.entity.ProductImage;
-import com.lam.eshopv2.form.CustomerForm;
+import com.lam.eshopv2.entity.*;
+import com.lam.eshopv2.form.ShippingAddressForm;
+import com.lam.eshopv2.model.ShippingAddressInfo;
 import com.lam.eshopv2.model.CartInfo;
 import com.lam.eshopv2.model.ProductInfo;
-import com.lam.eshopv2.repository.CategoryRepository;
-import com.lam.eshopv2.repository.ProductImageRepository;
-import com.lam.eshopv2.repository.ProductRepository;
+import com.lam.eshopv2.repository.*;
 import com.lam.eshopv2.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -23,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +31,9 @@ import java.util.List;
 @Transactional
 @RequestMapping("/shop")
 public class MainController {
+
+    @Autowired
+    AccountRepository accountRepository;
 
 
     @InitBinder
@@ -50,7 +48,9 @@ public class MainController {
     }
 
     @RequestMapping(value={"/"}, method = RequestMethod.GET)
-    public String home(Model model){
+    public String home(HttpServletRequest request,Model model){
+        model.addAttribute("hotProducts", hotProducts());
+        model.addAttribute("cartForm", Utils.getCartInSession(request));
         return "index";
     }
 
@@ -68,9 +68,30 @@ public class MainController {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    ShippingMethodRepository shippingMethodRepository;
 
-    @ModelAttribute("hotProducts")
+    @Autowired
+    PaymentMethodRepository paymentMethodRepository;
+
+
+    @ModelAttribute("cartForm")
+    public CartInfo cartInfo(HttpServletRequest request){
+        return Utils.getCartInSession(request);
+    }
+
+    @ModelAttribute("paymentMethodList")
+    public List<PaymentMethod> paymentMethods(HttpServletRequest request){
+        return paymentMethodRepository.findAll();
+    }
+    @ModelAttribute("shippingMethodList")
+    public List<ShippingMethod> shippingMethods(HttpServletRequest request){
+        return shippingMethodRepository.findAll();
+    }
+
+    // @ModelAttribute("hotProducts")
     public List<ProductInfo> hotProducts() {
+        System.out.print("Get hot product");
         List<ProductInfo> productInfos=new ArrayList<>();
         productRepository.findProductsByCategory("HOT").stream().forEach(product ->productInfos.add(fromProduct(product)));
         return productInfos;
@@ -106,7 +127,8 @@ public class MainController {
     @RequestMapping(value = "/products",method = RequestMethod.GET)
     public String productsList(HttpServletRequest request,Model model, //
                                @RequestParam(value = "page", defaultValue = "1") int page,
-                               @RequestParam(value = "type", defaultValue = "list") String type){
+                               @RequestParam(value = "type", defaultValue = "list") String type,
+                               @RequestParam(value = "category",defaultValue = "") String category){
         /*pagination style 1 */
         System.out.print("Hello all product");
         final int product_count=productRepository.countProducts();
@@ -128,9 +150,7 @@ public class MainController {
         System.out.print("Product count " + productInfos.size() + " max" + product_count);
         //if(type!="grid") return "products";
         //else
-
         model.addAttribute("cartForm", Utils.getCartInSession(request));
-
         return "productgrid";
     }
 
@@ -159,7 +179,6 @@ public class MainController {
         //if(type!="grid") return "products";
         //else
         model.addAttribute("cartForm", Utils.getCartInSession(request));
-
         return "productgrid";
     }
 
@@ -185,86 +204,103 @@ public class MainController {
         return "_header::#cart-item-list";
     }
 
-    @RequestMapping({ "/shoppingCartRemoveProduct" })
-    public String removeProductHandler(HttpServletRequest request, Model model, //
-                                       @RequestParam(value = "code", defaultValue = "") String code) {
-        Product product = null;
-        if (code != null && code.length() > 0) {
-            product = productRepository.findProductByCode(code);
-        }
-        if (product != null) {
+    @RequestMapping({ "/smallCart" })
+    public String smallCart(HttpServletRequest request, Model model, //
+                                     @RequestParam(value = "id", defaultValue = "") Integer id,
+                                     @RequestParam(value="quantity",defaultValue = "1") Integer quantity) {
 
-            CartInfo cartInfo = Utils.getCartInSession(request);
-
-          //  ProductInfo productInfo = new ProductInfo(product);
-
-            cartInfo.removeProduct(product);
-
-        }
-
-        return "redirect:shoppingCart";
+        model.addAttribute("cartForm", Utils.getCartInSession(request));
+        return "_header::#cart-item-list";
     }
 
-    // POST: Cập nhập số lượng cho các sản phẩm đã mua.
-    @RequestMapping(value = { "/shoppingCart" }, method = RequestMethod.POST)
-    public String shoppingCartUpdateQty(HttpServletRequest request, //
-                                        Model model, //
-                                        @ModelAttribute("cartForm") CartInfo cartForm) {
+    @RequestMapping(value = {"/updateCartProductQuantity" })
+    public String updateProductQuantityHandler(HttpServletRequest request, Model model, //
+                                       @RequestParam(value = "id", defaultValue = "") Integer id,
+                                       @RequestParam(value="quantity",defaultValue = "1") Integer quantity) {
+        Product product = null;
+        if (id != null ) {
+            product = productRepository.findProductById(id);
+        }
+        if (product != null) {
+            CartInfo cartInfo = Utils.getCartInSession(request);
+            cartInfo.updateProductQuantity(product,quantity);
+        }
+        model.addAttribute("cartForm", Utils.getCartInSession(request));
+        return "cart::#cart";
+    }
 
-        CartInfo cartInfo = Utils.getCartInSession(request);
-        cartInfo.updateQuantity(cartForm);
-
-        return "redirect:shoppingCart";
+    @RequestMapping(value = { "/removeCartProduct" })
+    public String removeProductHandler(HttpServletRequest request, Model model, //
+                                       @RequestParam(value = "id", defaultValue = "") Integer id) {
+        Product product = null;
+        if (id != null ) {
+            product = productRepository.findProductById(id);
+        }
+        if (product != null) {
+            CartInfo cartInfo = Utils.getCartInSession(request);
+            cartInfo.removeProduct(product);
+        }
+        return "cart::#cart";
     }
 
     // GET: Hiển thị giỏ hàng.
     @RequestMapping(value = { "/shoppingCart" }, method = RequestMethod.GET)
     public String shoppingCartHandler(HttpServletRequest request, Model model) {
-        CartInfo myCart = Utils.getCartInSession(request);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Account acc=null;
+        if(auth.isAuthenticated()){
+           acc=accountRepository.findAccountByName(auth.getName());
+        }
 
-        model.addAttribute("cartForm", myCart);
-        return "shoppingCart";
+        ShippingAddressForm shippingAddressForm = new ShippingAddressForm();
+        if(acc!=null){
+            shippingAddressForm=new ShippingAddressForm(new ShippingAddressInfo(acc));
+        }
+
+        model.addAttribute("shippingAddressForm", shippingAddressForm);
+        return "cart";
     }
-
+    @RequestMapping(value = { "/authorizedShoppingCart" }, method = RequestMethod.GET)
+    public String shoppingCartAuthorizedHandler(HttpServletRequest request, Model model){
+        return shoppingCartHandler(request,model);
+        //return "cart";
+    }
     // GET: Nhập thông tin khách hàng.
-    @RequestMapping(value = { "/shoppingCartCustomer" }, method = RequestMethod.GET)
+/*    @RequestMapping(value = { "/shoppingCartCustomer" }, method = RequestMethod.GET)
     public String shoppingCartCustomerForm(HttpServletRequest request, Model model) {
-
         CartInfo cartInfo = Utils.getCartInSession(request);
-
         if (cartInfo.isEmpty()) {
-
             return "redirect:shoppingCart";
         }
-        Customer customerInfo = cartInfo.getCustomer();
+        ShippingAddressInfo shippingAddressInfoInfo = cartInfo.getShippingAddressInfo();
 
-        CustomerForm customerForm = new CustomerForm(customerInfo);
+        ShippingAddressForm shippingAddressForm = new ShippingAddressForm(shippingAddressInfoInfo);
 
-        model.addAttribute("customerForm", customerForm);
+        model.addAttribute("shippingAddressForm", shippingAddressForm);
 
         return "shoppingCartCustomer";
     }
-
+*/
     // POST: Save thông tin khách hàng.
-    @RequestMapping(value = { "/shoppingCartCustomer" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "/shoppingCartCustomer" })
     public String shoppingCartCustomerSave(HttpServletRequest request, //
                                            Model model, //
-                                           @ModelAttribute("customerForm") @Validated CustomerForm customerForm, //
+                                           @ModelAttribute("shippingAddressForm") @Validated ShippingAddressForm shippingAddressForm, //
                                            BindingResult result, //
                                            final RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            customerForm.setValid(false);
+            shippingAddressForm.setValid(false);
             // Forward tới trang nhập lại.
-            return "shoppingCartCustomer";
+            return "cart";
         }
 
-        customerForm.setValid(true);
+        shippingAddressForm.setValid(true);
         CartInfo cartInfo = Utils.getCartInSession(request);
-        Customer customerInfo = new Customer(customerForm);
-        cartInfo.setCustomer(customerInfo);
+        ShippingAddressInfo shippingAddressInfoInfo = new ShippingAddressInfo(shippingAddressForm);
+        cartInfo.setShippingAddressInfo(shippingAddressInfoInfo);
 
-        return "redirect:shoppingCartConfirmation";
+        return "redirect:/shop/shoppingCartConfirmation";
     }
 
     // GET: Xem lại thông tin để xác nhận.
@@ -274,7 +310,7 @@ public class MainController {
 
         if (cartInfo == null || cartInfo.isEmpty()) {
 
-            return "redirect:/shoppingCart";
+            return "redirect:/shop/shoppingCart";
         } else if (!cartInfo.isValidCustomer()) {
 
             return "redirect:/shoppingCartCustomer";
@@ -289,8 +325,7 @@ public class MainController {
 
     public String shoppingCartConfirmationSave(HttpServletRequest request, Model model) {
         CartInfo cartInfo = Utils.getCartInSession(request);
-
-        if (cartInfo.isEmpty()) {
+       if (cartInfo.isEmpty()) {
 
             return "redirect:/shoppingCart";
         } else if (!cartInfo.isValidCustomer()) {
@@ -298,7 +333,10 @@ public class MainController {
             return "redirect:/shoppingCartCustomer";
         }
         try {
-            //orderDAO.saveOrder(cartInfo);
+            Order order = new Order();
+            order.setCustomerEmail(cartInfo.getShippingAddressInfo().getEmail());
+           // order.setCustomerAddress(cartInfo.getShippingAddressInfo().);
+           // orderDAO.saveOrder(cartInfo);
         } catch (Exception e) {
 
             return "shoppingCartConfirmation";

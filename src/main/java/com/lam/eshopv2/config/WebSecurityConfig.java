@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,13 +34,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
+        handler.setUseReferer(true);
+        return handler;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/products").permitAll()
-                .antMatchers("/saveproduct").permitAll();
+                .antMatchers("/saveproduct").permitAll()
+                .antMatchers("/shop/authorizedShoppingCart").access("hasAnyRole('ROLE_EMPLOYEE', 'ROLE_MANAGER')");
+
         // Các yêu cầu phải login với vai trò ROLE_EMPLOYEE hoặc ROLE_MANAGER.
         // Nếu chưa login, nó sẽ redirect tới trang /admin/login.
 
@@ -51,8 +62,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and().formLogin()//
                 //
                 .loginProcessingUrl("/j_spring_security_check") // Submit URL
-                .loginPage("/login")//
+                .loginPage("/shop/login")//
                 .defaultSuccessUrl("/")//
+              //  .successHandler(successHandler()) //redirect to current page
                 .failureUrl("/login?error=true")//
                 .usernameParameter("name")//
                 .passwordParameter("password")

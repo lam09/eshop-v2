@@ -15,6 +15,7 @@ public class OrderDetail implements Serializable {
 
     @Id
     @Column(name = "ID", length = 50, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
