@@ -12,22 +12,15 @@ import java.util.Set;
 
 @Entity
 @Table(name = "PRODUCTS",
-        uniqueConstraints = { @UniqueConstraint(columnNames = "CODE") })
+        uniqueConstraints = {@UniqueConstraint(columnNames = "CODE")})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = -1000119078147252957L;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     @Id
     @Column(name = "ID", length = 20, nullable = false)
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "CODE", length = 20, nullable = true)
@@ -46,11 +39,25 @@ public class Product implements Serializable {
     @Column(name = "CREATE_DATE", nullable = true)
     private Date createDate;
 
-    @Column(name = "DESCRIPTION",length = Integer.MAX_VALUE,nullable = true)
+    @Column(name = "DESCRIPTION", length = Integer.MAX_VALUE, nullable = true)
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ProductImage> productImages;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Property> properties;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Variant> variants;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public ProductImage getProfil() {
         return profil;
@@ -62,8 +69,6 @@ public class Product implements Serializable {
 
     private ProductImage profil;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Property> properties;
 
     public List<Property> getProperties() {
         return properties;
@@ -81,28 +86,7 @@ public class Product implements Serializable {
         this.variants = variants;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Variant> variants;
-/*
-    public List<Category> getCategories() {
-        return categories;
-    }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Category> categories;
-*/
- /*   @ManyToMany
-    @JoinTable(
-            name = "PRODUCT_PROPERTY",
-            joinColumns = @JoinColumn(name = "PRODUCT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PROPERTY_ID")
-    )
-    private Set<Property> properties;
-*/
     public Product() {
     }
 

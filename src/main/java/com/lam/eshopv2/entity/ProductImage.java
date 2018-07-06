@@ -1,5 +1,7 @@
 package com.lam.eshopv2.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -47,6 +49,7 @@ public class ProductImage implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID", nullable = false, //
             foreignKey = @ForeignKey(name = "PRODUCT_IMAGE_PROD_FK"))
+    @JsonManagedReference
     private Product product;
 
 

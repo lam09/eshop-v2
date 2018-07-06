@@ -14,5 +14,7 @@ public class Eshop {
     public static final String IMAGE_TYPE_ICON= "ICON_IMAGE";
     public static final String IMAGE_TYPE_GALLERY= "GALLERY_IMAGE";
 
-
+    public static enum OrderState {
+        RECIEVED,PREPARED,SHIPPED,COMPLETED
+    }
 }

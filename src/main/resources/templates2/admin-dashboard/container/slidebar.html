@@ -1,4 +1,5 @@
-<div class="sidebar" data-color="purple" data-image="/admin-dashboard/assets/img/sidebar-5.jpg">
+<div class="sidebar" data-color="purple" data-image="/admin-dashboard/assets/img/sidebar-5.jpg"
+     xmlns:th="http://www.w3.org/1999/xhtml">
 
     <!--
 
@@ -9,38 +10,39 @@
 
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="http://www.creative-tim.com" class="simple-text">
-                Creative Tim
+            <a th:href="@{/}" class="simple-text">
+                <i class="pe-7s-home"></i>
+                Shop's Name
             </a>
         </div>
 
         <ul class="nav">
-            <li class="active">
-                <a href="dashboard.html">
+            <li id="dashboard" class="active">
+                <a th:href="@{/admin/dashboard}">
                     <i class="pe-7s-graph"></i>
                     <p>Dashboard</p>
                 </a>
             </li>
-            <li>
-                <a href="user.html">
+            <li id="orders">
+                <a th:href="@{/admin/orders}">
                     <i class="pe-7s-user"></i>
-                    <p>User Profile</p>
+                    <p>Orders</p>
                 </a>
             </li>
-            <li>
-                <a href="table.html">
+            <li id="products">
+                <a th:href="@{/admin/products}">
                     <i class="pe-7s-note2"></i>
-                    <p>Table List</p>
+                    <p>Products</p>
                 </a>
             </li>
-            <li>
-                <a href="typography.html">
-                    <i class="pe-7s-news-paper"></i>
-                    <p>Typography</p>
+            <li id="accounts">
+                <a th:href="@{/admin/accounts}">
+                    <i class="pe-7s-users"></i>
+                    <p>Accouts</p>
                 </a>
             </li>
-            <li>
-                <a href="icons.html">
+            <li id="icons">
+                <a th:href="@{/admin/icons}">
                     <i class="pe-7s-science"></i>
                     <p>Icons</p>
                 </a>

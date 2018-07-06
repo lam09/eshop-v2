@@ -4,6 +4,8 @@ package com.lam.eshopv2.entity;
  * Created by a.lam.tuan on 23. 5. 2018.
  */
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,14 +20,14 @@ public class Order implements Serializable {
 
     @Id
     @Column(name = "ID", length = 50)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     @Column(name = "ORDER_DATE", nullable = false)
     private Date orderDate;
 
     @Column(name = "ORDER_NUM", nullable = false)
-    private int orderNum;
+    private String orderNum;
 
     @Column(name = "AMOUNT", nullable = false)
     private double amount;
@@ -33,14 +35,80 @@ public class Order implements Serializable {
     @Column(name="NOTE",nullable=true)
     private String note;
 
+    public String getCustomerFirstName() {
+        return customerFirstName;
+    }
+
+    public void setCustomerFirstName(String customerFirstName) {
+        this.customerFirstName = customerFirstName;
+    }
+
+    public String getCustomerLastName() {
+        return customerLastName;
+    }
+
+    public void setCustomerLastName(String customerLastName) {
+        this.customerLastName = customerLastName;
+    }
+
+    public String getCustomerCity() {
+        return customerCity;
+    }
+
+    public void setCustomerCity(String customerCity) {
+        this.customerCity = customerCity;
+    }
+
+    public String getCustomerPostalCode() {
+        return customerPostalCode;
+    }
+
+    public void setCustomerPostalCode(String customerPostalCode) {
+        this.customerPostalCode = customerPostalCode;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public ShippingMethod getShippingMethod() {
+        return shippingMethod;
+    }
+
+    public void setShippingMethod(ShippingMethod shippingMethod) {
+        this.shippingMethod = shippingMethod;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     @Column(name="STATE",nullable=true)
+
     private String state;
 
-    @Column(name = "CUSTOMER_NAME", length = 255, nullable = false)
-    private String customerName;
+    @Column(name = "CUSTOMER_FIRSTNAME", length = 255, nullable = false)
+    private String customerFirstName;
+
+    @Column(name = "CUSTOMER_LASTNAME", length = 255, nullable = false)
+    private String customerLastName;
 
     @Column(name = "CUSTOMER_ADDRESS", length = 255, nullable = false)
     private String customerAddress;
+
+    @Column(name = "CUSTOMER_CITY", length = 255, nullable = false)
+    private String customerCity;
+
+    @Column(name = "CUSTOMER_POSTALCODE", length = 255, nullable = false)
+    private String customerPostalCode;
 
     @Column(name = "CUSTOMER_EMAIL", length = 128, nullable = false)
     private String customerEmail;
@@ -70,13 +138,25 @@ public class Order implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<OrderDetail> orderDetails;
 
-    public String getId() {
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    @Column(name = "PAID", length = 128, nullable = false)
+    private boolean paid=false;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -88,11 +168,11 @@ public class Order implements Serializable {
         this.orderDate = orderDate;
     }
 
-    public int getOrderNum() {
+    public String getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(int orderNum) {
+    public void setOrderNum(String orderNum) {
         this.orderNum = orderNum;
     }
 
@@ -104,13 +184,6 @@ public class Order implements Serializable {
         this.amount = amount;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
 
     public String getCustomerAddress() {
         return customerAddress;

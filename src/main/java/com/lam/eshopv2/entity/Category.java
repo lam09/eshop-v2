@@ -1,5 +1,6 @@
 package com.lam.eshopv2.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,7 +18,7 @@ public class Category implements Serializable {
 
     @Id
     @Column(name = "ID", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "NAME", length = 255, nullable = false)
@@ -35,6 +36,7 @@ public class Category implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonManagedReference
     private Product product;
 
     public Category() {

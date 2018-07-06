@@ -4,6 +4,9 @@ package com.lam.eshopv2.entity;
  * Created by a.lam.tuan on 23. 5. 2018.
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -15,12 +18,13 @@ public class OrderDetail implements Serializable {
 
     @Id
     @Column(name = "ID", length = 50, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_ID", nullable = false, //
             foreignKey = @ForeignKey(name = "ORDER_DETAIL_ORD_FK"))
+    @JsonManagedReference
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,11 +51,11 @@ public class OrderDetail implements Serializable {
         this.amount = amount;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

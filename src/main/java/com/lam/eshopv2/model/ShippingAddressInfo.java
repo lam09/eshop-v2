@@ -2,6 +2,8 @@ package com.lam.eshopv2.model;
 
 
 import com.lam.eshopv2.entity.Account;
+import com.lam.eshopv2.entity.PaymentMethod;
+import com.lam.eshopv2.entity.ShippingMethod;
 import com.lam.eshopv2.form.ShippingAddressForm;
 
 /**
@@ -10,7 +12,7 @@ import com.lam.eshopv2.form.ShippingAddressForm;
 public class ShippingAddressInfo {
 
     private String firstname;
-    private String lasttname;
+    private String lastname;
     private String address;
     private String email;
     private String phone;
@@ -43,7 +45,7 @@ public class ShippingAddressInfo {
 
     public ShippingAddressInfo(Account account) {
         this.firstname = account.getFirstname();
-        this.lasttname=account.getLastname();
+        this.lastname=account.getLastname();
         this.address = account.getAddress();
         this.email = account.getEmail();
         this.phone = account.getPhone();
@@ -53,7 +55,7 @@ public class ShippingAddressInfo {
 
     public ShippingAddressInfo(ShippingAddressForm shippingAddressForm) {
         this.firstname = shippingAddressForm.getFirstname();
-        this.lasttname= shippingAddressForm.getLastname();
+        this.lastname= shippingAddressForm.getLastname();
         this.address = shippingAddressForm.getAddress();
         this.email = shippingAddressForm.getEmail();
         this.phone = shippingAddressForm.getPhone();
@@ -104,12 +106,12 @@ public class ShippingAddressInfo {
         this.firstname = firstname;
     }
 
-    public String getLasttname() {
-        return lasttname;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLasttname(String lasttname) {
-        this.lasttname = lasttname;
+    public void setLastname(String lasttname) {
+        this.lastname = lasttname;
     }
 
 }

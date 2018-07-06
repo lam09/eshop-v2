@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartInfo {
-    private int orderNum;
+    private String orderNum;
     private ShippingAddressInfo shippingAddressInfo;
 
     public PaymentMethod getPaymentMethod() {
@@ -58,11 +58,11 @@ public class CartInfo {
 
     }
 
-    public int getOrderNum() {
+    public String getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(int orderNum) {
+    public void setOrderNum(String orderNum) {
         this.orderNum = orderNum;
     }
 

@@ -29,8 +29,6 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="/admin-dashboard/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
 </head>
 <body>
 
@@ -39,7 +37,7 @@
     <div class="main-panel">
         <th:block th:include="/admin-dashboard/container/navbar"></th:block>
 
-        <div class="content"  ng-app="OrderManagement" ng-controller="OrderController">
+        <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -52,28 +50,53 @@
                                 <table class="table table-hover table-striped">
                                     <thead>
                                         <th>ID</th>
-                                    	<th>Amount</th>
-                                    	<th>Customer address</th>
-                                    	<th>Customer email</th>
-                                        <th>Customer phone</th>
-                                        <th>Order date</th>
-                                        <th>state</th>
-                                        <th>Customer city</th>
-                                        <th>Customer fistname</th>
-                                        <th>Customer lastname</th>
+                                    	<th>Name</th>
+                                    	<th>Salary</th>
+                                    	<th>Country</th>
+                                    	<th>City</th>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="order in orders">
-                                            <td>{{ order.id }}</td>
-                                            <td>{{ order.amount }}</td>
-                                            <td>{{ order.customerAddress }}</td>
-                                            <td>{{ order.customerEmail }}</td>
-                                            <td>{{ order.customerPhone }}</td>
-                                            <td>{{ order.orderDate }}</td>
-                                            <td>{{ order.state }}</td>
-                                            <td>{{ order.customerCity }}</td>
-                                            <td>{{ order.customerFirstName }}</td>
-                                            <td>{{ order.customerLastName }}</td>
+                                        <tr>
+                                        	<td>1</td>
+                                        	<td>Dakota Rice</td>
+                                        	<td>$36,738</td>
+                                        	<td>Niger</td>
+                                        	<td>Oud-Turnhout</td>
+                                        </tr>
+                                        <tr>
+                                        	<td>2</td>
+                                        	<td>Minerva Hooper</td>
+                                        	<td>$23,789</td>
+                                        	<td>Curaçao</td>
+                                        	<td>Sinaai-Waas</td>
+                                        </tr>
+                                        <tr>
+                                        	<td>3</td>
+                                        	<td>Sage Rodriguez</td>
+                                        	<td>$56,142</td>
+                                        	<td>Netherlands</td>
+                                        	<td>Baileux</td>
+                                        </tr>
+                                        <tr>
+                                        	<td>4</td>
+                                        	<td>Philip Chaney</td>
+                                        	<td>$38,735</td>
+                                        	<td>Korea, South</td>
+                                        	<td>Overland Park</td>
+                                        </tr>
+                                        <tr>
+                                        	<td>5</td>
+                                        	<td>Doris Greene</td>
+                                        	<td>$63,542</td>
+                                        	<td>Malawi</td>
+                                        	<td>Feldkirchen in Kärnten</td>
+                                        </tr>
+                                        <tr>
+                                        	<td>6</td>
+                                        	<td>Mason Porter</td>
+                                        	<td>$78,615</td>
+                                        	<td>Chile</td>
+                                        	<td>Gloucester</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -153,142 +176,13 @@
             </div>
         </div>
 
-        <footer class="footer">
-            <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-                        <li>
-                            <a href="#">
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Company
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Portfolio
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                               Blog
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <p class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
-                </p>
-            </div>
-        </footer>
+        <th:block th:include="/admin-dashboard/container/footer"></th:block>
 
 
     </div>
 </div>
 
 
-<script>
-    var app = angular.module("OrderManagement", []);
-
-    // Controller Part
-    app.controller("OrderController", function($scope, $http) {
-
-        $scope.orders = [];
-      /*  $scope.orderForm = {
-            empId: 1,
-            empNo: "",
-            empName: ""
-        };*/
-
-        // Now load the data from server
-        _refreshOrderData();
-
-/*        // HTTP POST/PUT methods for add/edit order
-        // Call: http://localhost:8080/order
-        $scope.submitorder = function() {
-
-            var method = "";
-            var url = "";
-
-            if ($scope.orderForm.empId == -1) {
-                method = "POST";
-                url = '/order';
-            } else {
-                method = "PUT";
-                url = '/order';
-            }
-
-            $http({
-                method: method,
-                url: url,
-                data: angular.toJson($scope.orderForm),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(_success, _error);
-        };
-
-        $scope.createorder = function() {
-            _clearFormData();
-        }
-
-        // HTTP DELETE- delete order by Id
-        // Call: http://localhost:8080/order/{empId}
-        $scope.deleteorder = function(order) {
-            $http({
-                method: 'DELETE',
-                url: '/order/' + order.empId
-            }).then(_success, _error);
-        };
-
-        // In case of edit
-        $scope.editorder = function(order) {
-            $scope.orderForm.orderId = order.id;
-            $scope.orderForm.orderState = order.state;
-        };
-*/
-        // Private Method
-        // HTTP GET- get all orders collection
-        // Call: http://localhost:8080/orders
-        function _refreshOrderData() {
-            $http({
-                method: 'GET',
-                url: '/admin/orders/all'
-            }).then(
-                function(res) { // success
-                    $scope.orders = res.data;
-                    console.log(res.data);
-                },
-                function(res) { // error
-                    console.log("Error: " + res.status + " : " + res.data);
-                }
-            );
-        }
-/*
-        function _success(res) {
-            _refreshorderData();
-            _clearFormData();
-        }
-
-        function _error(res) {
-            var data = res.data;
-            var status = res.status;
-            var header = res.header;
-            var config = res.config;
-            alert("Error: " + status + ":" + data);
-        }
-
-        // Clear the form
-        function _clearFormData() {
-            $scope.orderForm.empId = -1;
-            $scope.orderForm.empNo = "";
-            $scope.orderForm.empName = ""
-        };*/
-    });
-</script>
 </body>
 
     <!--   Core JS Files   -->
@@ -310,10 +204,5 @@
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 	<!--<script src="/admin-dashboard/assets/js/demo.js"></script>-->
 
-<script>
-    $(document).ready(function () {
-        $(".nav li").removeClass("active");
-        $("#orders").addClass("active")
-    });
-</script>
+
 </html>

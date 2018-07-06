@@ -27,7 +27,7 @@ public class ShippingAddressFormValidator implements Validator {
         ShippingAddressForm custInfo = (ShippingAddressForm) target;
 
         // Kiểm tra các trường (field) của ShippingAddressForm.
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty.ShippingAddressForm.name");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstname", "NotEmpty.ShippingAddressForm.name");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty.ShippingAddressForm.email");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "NotEmpty.ShippingAddressForm.address");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phone", "NotEmpty.ShippingAddressForm.phone");

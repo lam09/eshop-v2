@@ -105,11 +105,11 @@
                                             <i class="fa fa-heart-o">
                                             </i>
                                         </button>
-                                        <!--<th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">-->
+                                        <th:block sec:authorize="hasAnyRole('ROLE_MANAGER','ROLE_EMPLOYEE')">
                                         <a th:href="@{|/admin/editproduct/${product.product.id}|}" class="btn btn-info btn-lg">
                                             <span class="glyphicon glyphicon-edit"></span> Edit
                                         </a>
-                                        <!--</th:block>-->
+                                        </th:block>
                                     </div>
                                 </div>
                             </div>

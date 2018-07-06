@@ -33,7 +33,10 @@
     <th:block th:include="_header"></th:block>
     <div class="clearfix">
     </div>
-    <div class="container_fullwidth">
+    <div class="container wrapper">
+        <div id="shipping" class="panel panel-default" style="background-color: snow">
+            <div class="panel-body"><strong>PRODUCT CART</strong></div>
+        </div>
         <div class="row cart-head">
             <div class="container">
                 <div class="row">
@@ -82,10 +85,6 @@
                                     </div>
                                 </div>
                             </td>
-                            <!--<td data-th="product_id" hidden="true">-->
-                                <!--<input type="text" th:id="'product-id-'+${cartLineInfo.product.id}" class="productId" th:value="${cartLineInfo.product.id}"/>-->
-                            <!--</td>-->
-
                             <td data-th="Price"><span th:utext="${cartLineInfo.product.price}"></span>€</td>
                             <td data-th="Quantity" class="text-center" >
                                 <input type="number" class="form-control text-center" th:id="'product-quantity-'+${cartLineInfo.product.id}" th:value="${cartLineInfo.quantity}">
@@ -99,6 +98,12 @@
                         </tr>
                     </th:block>
                 </th:block>
+                <th:block th:if="${cartForm == null || cartForm.cartLines == null || cartForm.cartLines.empty}">
+                    <tr>
+                    <strong>There is no items in Cart</strong>
+                    <a th:href="@{/}" class="btn btn-warning">Go shopping</a>
+                    </tr>
+                </th:block>
                 </tbody>
                 <tfoot>
                 <tr class="visible-xs">
@@ -108,8 +113,8 @@
                     <td><a th:href="@{/}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue
                         Shopping</a></td>
                     <td colspan="2" class="hidden-xs"></td>
-                    <td class="hidden-xs text-center"><strong>Total<span th:text="${cartForm.amount}"></span></strong></td>
-                    <td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a>
+                    <td class="hidden-xs text-center"><strong>Total <span th:text="${cartForm.amount}"></span>€</strong></td>
+                    <td><a href="#shipping" class="btn btn-success btn-block" onclick="goToShipping()">Continue <i class="fa fa-angle-right"></i></a>
                     </td>
                 </tr>
                 </tfoot>
@@ -117,13 +122,21 @@
         </div>
     </div>
     <div class="container wrapper">
-
-        <div class="row cart-body">
-            <form class="form-horizontal" th:object = "${shippingAddressForm}"  method="post" th:action="@{/shop/shoppingCartCustomer}">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-md-push-6 col-sm-push-6">
+        <div id="shipping" class="panel panel-default" style="background-color: snow">
+            <div class="panel-body"><strong>SHIPPING & PAYMENT</strong></div>
+        </div>
+        <div id="payment-shipping" class="row cart-body"  >
+            <form th:object="${shippingAddressForm}" method="post" th:action="@{/shop/shoppingCartConfirmation}">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <!--SHIPPING METHOD-->
                     <div class="panel panel-info">
-                        <div class="panel-heading"><h4>Shipping Address</h4></div>
+                        <div class="panel-heading">Shipping Address</div>
+                        <th:block sec:authorize="!isAuthenticated()">
+                            <a style="background-color: lavender;height: 50%" class="btn btn-lg btn-primary btn-block" th:href="@{/shop/authorizedShoppingCart}"><i class="fa fa-sign-in"></i> Fill address by login</a>
+                        </th:block>
+                        <th:block sec:authorize="isAuthenticated()">
+                            <a style="background-color: lavender" class="btn btn-lg btn-primary btn-block" th:href="@{/accountInfo}" th:utext="${'Hello ' + #request.userPrincipal.name}"></a>
+                        </th:block>
                         <div class="panel-body" >
                             <div class="form-group">
                                 <div class="col-md-6 col-xs-12">
@@ -170,131 +183,55 @@
                                 <div class="col-md-12"><input type="text" name="email_address" class="form-control"
                                                               value="" th:field="*{email}"/></div>
                             </div>
-                            <div class="form-group">
-                            <input type="submit" value="PLACE ORDER" />
-                            </div>
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-12">-->
+                                <!--<button type="summit" value="save address" th:onclick="'saveCustomAddress()'">SAVE</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
                     </div>
-                    <!--SHIPPING METHOD END-->
-                    <!--CREDIT CART PAYMENT-->
-                    <!--<div class="panel panel-info">-->
-                        <!--<div class="panel-heading"><span><i class="glyphicon glyphicon-lock"></i></span>Payment</div>-->
-                        <!--<div class="panel-body">-->
-                            <!--<div class="form-group">-->
-                                <!--<div class="col-md-12"><strong>Card Type:</strong></div>-->
-                                <!--<div class="col-md-12">-->
-                                    <!--<select id="CreditCardType" name="CreditCardType" class="form-control">-->
-                                        <!--<option value="5">Visa</option>-->
-                                        <!--<option value="6">MasterCard</option>-->
-                                        <!--<option value="7">American Express</option>-->
-                                        <!--<option value="8">Discover</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                                <!--<div class="col-md-12"><strong>Credit Card Number:</strong></div>-->
-                                <!--<div class="col-md-12"><input type="text" class="form-control" name="car_number"-->
-                                                              <!--value=""/></div>-->
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                                <!--<div class="col-md-12"><strong>Card CVV:</strong></div>-->
-                                <!--<div class="col-md-12"><input type="text" class="form-control" name="car_code"-->
-                                                              <!--value=""/></div>-->
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                                <!--<div class="col-md-12">-->
-                                    <!--<strong>Expiration Date</strong>-->
-                                <!--</div>-->
-                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
-                                    <!--<select class="form-control" name="">-->
-                                        <!--<option value="">Month</option>-->
-                                        <!--<option value="01">01</option>-->
-                                        <!--<option value="02">02</option>-->
-                                        <!--<option value="03">03</option>-->
-                                        <!--<option value="04">04</option>-->
-                                        <!--<option value="05">05</option>-->
-                                        <!--<option value="06">06</option>-->
-                                        <!--<option value="07">07</option>-->
-                                        <!--<option value="08">08</option>-->
-                                        <!--<option value="09">09</option>-->
-                                        <!--<option value="10">10</option>-->
-                                        <!--<option value="11">11</option>-->
-                                        <!--<option value="12">12</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
-                                <!--<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">-->
-                                    <!--<select class="form-control" name="">-->
-                                        <!--<option value="">Year</option>-->
-                                        <!--<option value="2015">2015</option>-->
-                                        <!--<option value="2016">2016</option>-->
-                                        <!--<option value="2017">2017</option>-->
-                                        <!--<option value="2018">2018</option>-->
-                                        <!--<option value="2019">2019</option>-->
-                                        <!--<option value="2020">2020</option>-->
-                                        <!--<option value="2021">2021</option>-->
-                                        <!--<option value="2022">2022</option>-->
-                                        <!--<option value="2023">2023</option>-->
-                                        <!--<option value="2024">2024</option>-->
-                                        <!--<option value="2025">2025</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                                <!--<div class="col-md-12">-->
-                                    <!--<span>Pay secure using your credit card.</span>-->
-                                <!--</div>-->
-                                <!--<div class="col-md-12">-->
-                                    <!--<ul class="cards">-->
-                                        <!--<li class="visa hand">Visa</li>-->
-                                        <!--<li class="mastercard hand">MasterCard</li>-->
-                                        <!--<li class="amex hand">Amex</li>-->
-                                    <!--</ul>-->
-                                    <!--<div class="clearfix"></div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="form-group">-->
-                                <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
-                                    <!--<button type="submit" class="btn btn-primary btn-submit-fix">PLACE ORDER</button>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--CREDIT CART PAYMENT END-->
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-body">SHIPPING CONFIRMATION</div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-md-pull-6 col-sm-pull-6">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <!--REVIEW ORDER-->
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            LOGIN
+                            Shipping options
                         </div>
                         <div class="panel-body">
-                            <th:block sec:authorize="!isAuthenticated()">
-                                <!-- /login?error=true -->
-                                <th:block
-                                        th:if="${#session != null && #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}">
-                                    <div th:if="${#request.getParameter('error') == 'true'}"
-                                         style="color: red; margin: 10px 0px;">
-                                        Login Failed!!!<br/> Reason :
-                                        <span th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}"></span>
-                                    </div>
-                                </th:block>
-                                <a th:href="@{/shop/authorizedShoppingCart}"> LOGIN</a>
+                            <th:block th:each="option: ${shippingMethodList}">
+                                <div class="form-check">
+                                    <input type="radio"
+                                           th:field="*{shippingMethod}"
+                                           th:value="${option}" />
+                                    <label
+                                            th:for="${#ids.prev('shippingMethod')}"
+                                            th:text="${option}"></label>
+                                </div>
                             </th:block>
-                            <th:block sec:authorize="isAuthenticated()">
-                                <div class="row">
-                                    Hello
-                                    <a th:href="@{/admin/accountInfo}" th:utext="${#request.userPrincipal.name}">..</a>
-                                    <a th:href="@{/logout}">Logout</a>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Payment options
+                        </div>
+                        <div class="panel-body">
+                            <th:block th:each="option: ${paymentMethodList}">
+                                <div class="form-check">
+                                    <input type="radio"
+                                           th:field="*{paymentMethod}"
+                                           th:value="${option}" />
+                                    <label
+                                            th:for="${#ids.prev('paymentMethod')}"
+                                            th:text="${option}"></label>
                                 </div>
                             </th:block>
                         </div>
                     </div>
                     <!--REVIEW ORDER END-->
                 </div>
-
+                <div class="btn-group btn-group-lg right">
+                    <button type="submit" class="btn btn-primary">Send order</button>
+                </div>
             </form>
         </div>
         <div class="row cart-footer">
