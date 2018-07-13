@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "PRODUCTS",
-        uniqueConstraints = {@UniqueConstraint(columnNames = "CODE")})
+@Table(name = "PRODUCTS")
 public class Product implements Serializable {
 
     private static final long serialVersionUID = -1000119078147252957L;
@@ -41,13 +40,13 @@ public class Product implements Serializable {
 
     @Column(name = "DESCRIPTION", length = Integer.MAX_VALUE, nullable = true)
     private String description;
-
+    @Transient
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ProductImage> productImages;
-
+    @Transient
     @OneToMany(fetch = FetchType.LAZY)
     private List<Property> properties;
-
+    @Transient
     @OneToMany(fetch = FetchType.LAZY)
     private List<Variant> variants;
 
@@ -58,17 +57,6 @@ public class Product implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public ProductImage getProfil() {
-        return profil;
-    }
-
-    public void setProfil(ProductImage profil) {
-        this.profil = profil;
-    }
-
-    private ProductImage profil;
-
 
     public List<Property> getProperties() {
         return properties;

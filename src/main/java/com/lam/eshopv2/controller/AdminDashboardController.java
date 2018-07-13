@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -39,6 +40,11 @@ public class AdminDashboardController {
         return "/admin-dashboard/products";
     }
 
+    @RequestMapping("/admin/productDetail")
+    public String productDetail(@RequestParam("id")Integer id){
+        return "/admin-dashboard/product";
+    }
+
     @RequestMapping("/admin/icons")
     public String icons(){
         return "/admin-dashboard/icons";
@@ -48,6 +54,9 @@ public class AdminDashboardController {
     public String accounts(){
         return "/admin-dashboard/accounts";
     }
+
+
+
 /*
     @RequestMapping("/admin/products")
     public String products(){

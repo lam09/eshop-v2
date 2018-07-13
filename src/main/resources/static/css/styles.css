@@ -12,6 +12,7 @@ body {
     background: #F8F8F8;
     padding:0px 5px;
     text-align:center;
+    background-image:url('/images/trianglify.png');
 }
 
 .page-title  {

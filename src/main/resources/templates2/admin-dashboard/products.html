@@ -31,65 +31,72 @@
     <link href="/admin-dashboard/assets/css/pe-icon-7-stroke.css" rel="stylesheet"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+
+    <!--     Editable cell     -->
+    <link href="/admin-dashboard/assets/dist/css/xeditable.css" rel="stylesheet">
+    <script src="/admin-dashboard/assets/dist/js/xeditable.js"></script>
 </head>
 <body>
 
 <div class="wrapper">
     <th:block th:include="/admin-dashboard/container/slidebar"></th:block>
-    <div class="main-panel">
+    <div class="main-panel" ng-app="app">
         <th:block th:include="/admin-dashboard/container/navbar"></th:block>
 
-        <div class="content" ng-app="ProductManagement" ng-controller="ProductController">
+        <div class="content"  ng-controller="ProductController">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Add Product Form</h4>
-                            </div>
-                            <div class="content">
-                                <form ng-submit="submitProduct()">
-                                    <div class="form-group">
-                                        <label for="productName">Product Name:</label>
-                                        <input type="text" class="form-control" id="productName"
-                                               ng-model="productForm.productName"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="productPrice">Price:</label>
-                                        <input type="text" class="form-control" id="productPrice"
-                                               ng-model="productForm.productPrice"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="productDescription">Description:</label>
-                                        <textarea cols="40" rows="5" type="text" class="form-control"
-                                                  id="productDescription"
-                                                  ng-model="productForm.productDescription"/></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="productCode">Code:</label>
-                                        <input type="text" class="form-control" id="productCode"
-                                               ng-model="productForm.productCode"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="productQuantity">Quantity:</label>
-                                        <input type="text" class="form-control" id="productQuantity"
-                                               ng-model="productForm.productQuantity"/>
-                                    </div>
-                                    <button type="submit" class="btn btn-default" id="btn_submit">Add</button>
-                                </form>
+                        <button id="show-product-form" type="button" class="btn btn-info" data-toggle="collapse"
+                                data-target="#add-product-form">Add new
+                        </button>
+                        <div id="add-product-form" class="collapse">
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title">Add Product Form</h4>
+                                </div>
+                                <div class="content">
+                                    <form ng-submit="submitProduct()">
+                                        <div class="form-group">
+                                            <label for="productName">Product Name:</label>
+                                            <input type="text" class="form-control" id="productName"
+                                                   ng-model="productForm.name"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productPrice">Price:</label>
+                                            <input type="text" class="form-control" id="productPrice"
+                                                   ng-model="productForm.price"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productDescription">Description:</label>
+                                            <textarea cols="40" rows="5" type="text" class="form-control"
+                                                      id="productDescription"
+                                                      ng-model="productForm.description"/></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productCode">Code:</label>
+                                            <input type="text" class="form-control" id="productCode"
+                                                   ng-model="productForm.code"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productQuantity">Quantity:</label>
+                                            <input type="text" class="form-control" id="productQuantity"
+                                                   ng-model="productForm.quantity"/>
+                                        </div>
+                                        <button type="submit" class="btn btn-default" id="btn_submit">SAVE</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Striped Table with Hover</h4>
-                                <p class="category">Here is a subtitle for this table</p>
+                                <h4 class="title">Product List</h4>
+                                <p class="category">All</p>
                             </div>
                             <div class="content table-responsive table-full-width">
-                                <table class="table table-hover table-striped">
+                                <table class="table table-hover table-striped table-condensed">
                                     <thead>
                                     <th>ID</th>
                                     <th>Code</th>
@@ -101,13 +108,77 @@
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="product in products">
-                                        <td>{{product.id}}</td>
-                                        <td>{{product.code}}</td>
-                                        <td>{{product.createDate}}</td>
-                                        <td>{{product.description}}</td>
-                                        <td>{{product.name}}</td>
-                                        <td>{{product.price}}</td>
-                                        <td>{{product.quantity}}</td>
+                                        <td>
+                                             <span e-name="id" e-form="rowform">
+                                                 {{product.id}}
+                                             </span>
+                                        </td>
+                                        <td>
+                                            <span e-name="code" e-form="rowform">
+                                            {{product.code}}
+                                             </span>
+                                        </td>
+                                        <td>
+                                            <span e-name="createDate"
+                                                  e-form="rowform">
+                                            {{product.createDate}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-textarea="product.description" e-rows="5" e-cols="40" e-name="description"
+                                                  e-form="rowform">
+                                            {{product.description}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-text="product.name" e-name="name" e-form="rowform">
+                                            {{product.name}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-text="product.price" e-name="price" e-form="rowform">
+                                            {{product.price}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span editable-number="product.quantity" e-name="quantity" e-form="rowform">
+                                            {{product.quantity}}
+                                            </span>
+                                        </td>
+                                        <td style="white-space: nowrap">
+                                            <!-- form -->
+                                            <form editable-form name="rowform" onbeforesave="saveProduct($data,product)"
+                                                  ng-show="rowform.$visible" class="form-buttons form-inline"
+                                                  shown="inserted == product">
+                                                <button type="submit" ng-disabled="rowform.$waiting"
+                                                        class="btn btn-primary">
+                                                    save
+                                                </button>
+                                                <button type="button" ng-disabled="rowform.$waiting"
+                                                        ng-click="rowform.$cancel()" class="btn btn-default">
+                                                    cancel
+                                                </button>
+                                            </form>
+                                            <div class="buttons" ng-show="!rowform.$visible">
+                                                <button type="button" class="btn btn-primary"
+                                                        ng-click="rowform.$show()">Edit
+                                                </button>
+                                                <button type="button" class="btn btn-danger"
+                                                        ng-click="deleteProduct(product)">Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                    ng-click="productDetail(product)">Detail
+                                            </button>
+                                        </td>
+                                        <!--<td>-->
+                                        <!--<button ng-click="editProduct(product)" class="edit-button">Edit</button>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                        <!--<button ng-click="deleteProduct(product)" class="delete-button">Delete</button>-->
+                                        <!--</td>-->
                                     </tr>
                                     </tbody>
                                 </table>
@@ -121,8 +192,182 @@
         <th:block th:include="/admin-dashboard/container/footer"></th:block>
     </div>
 </div>
+
 <script>
-    var app = angular.module("ProductManagement", []);
+    var app = angular.module("app",["xeditable"]);
+    app.run(['editableOptions', function(editableOptions) {
+        editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+    }]);
+    // Controller Part
+    app.controller("ProductController", function ($scope, $http,$window) {
+
+        $scope.products = [];
+        $scope.productForm = {
+            id: 1,
+            code: "",
+            name: "",
+            description: "",
+            quantity: "",
+            price: ""
+        };
+
+        // Now load the data from server
+        _refreshProductsData();
+
+        // HTTP POST/PUT methods for add/edit order
+        // Call: http://localhost:8080/order
+        $scope.submitProduct = function () {
+
+            var method = "";
+            var url = "";
+
+            if ($scope.productForm.productId == -1) {
+                method = "POST";
+                url = '/admin/product';
+            } else {
+                method = "PUT";
+                url = '/admin/product';
+            }
+
+            $http({
+                method: method,
+                url: url,
+                data: angular.toJson($scope.productForm),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(_success, _error);
+        };
+
+        $scope.createproduct = function () {
+            _clearFormData();
+        }
+
+        // HTTP DELETE- delete order by Id
+        // Call: http://localhost:8080/order/{empId}
+        $scope.deleteProduct = function (product) {
+            $http({
+                method: 'DELETE',
+                url: '/admin/product?id=' + product.id
+            }).then(_success, _error);
+        };
+
+        $scope.saveProduct = function (data,product) {
+            angular.extend(data);
+            $scope.productForm.id = product.id;
+            $scope.productForm.name = data.name;
+            $scope.productForm.code = product.code;
+            $scope.productForm.description = data.description;
+            $scope.productForm.quantity = data.quantity;
+            $scope.productForm.price = data.price;
+
+            $http({
+                method:'PUT',
+                url:'/admin/product',
+                data: angular.toJson($scope.productForm),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(_success, _error);
+        }
+        // In case of edit
+        $scope.editProduct = function (product) {
+            $scope.productForm.productId = product.id;
+            $scope.productForm.productName = product.name;
+            $scope.productForm.productCode = product.code;
+            $scope.productForm.productDescription = product.description;
+            $scope.productForm.productQuantity = product.quantity;
+            $scope.productForm.productPrice = product.price;
+        };
+
+        //Detail
+        $scope.productDetail = function (product) {
+            $window.location.href="/admin/productDetail?id="+product.id;
+        };
+
+        // Private Method
+        // HTTP GET- get all orders collection
+        // Call: http://localhost:8080/orders
+        function _refreshProductsData() {
+            $http({
+                method: 'GET',
+                url: '/admin/products/all'
+            }).then(
+                function (res) { // success
+                    $scope.products = res.data;
+                    console.log(res.data);
+                },
+                function (res) { // error
+                    console.log("Error: " + res.status + " : " + res.data);
+                }
+            );
+        }
+
+
+        function _success(res) {
+            _refreshProductsData();
+            _clearFormData();
+        }
+
+        function _error(res) {
+            var data = res.data;
+            var status = res.status;
+            var header = res.header;
+            var config = res.config;
+            alert("Error: " + status + ":" + data);
+        }
+
+        // Clear the form
+        function _clearFormData() {
+            $scope.productForm.id = -1;
+            $scope.productForm.name = "";
+            $scope.productForm.code = "";
+            $scope.productForm.description = "";
+            $scope.productForm.quantity = "";
+            $scope.productForm.price = "";
+        };
+    });
+
+</script>
+
+</body>
+
+<!--   Core JS Files   -->
+<script src="/admin-dashboard/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="/admin-dashboard/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="/admin-dashboard/assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="/admin-dashboard/assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="/admin-dashboard/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<!--<script src="/admin-dashboard/assets/js/demo.js"></script>-->
+
+<script>
+    $(document).ready(function () {
+        $(".nav li").removeClass("active");
+        $("#products").addClass("active")
+    });
+
+    $("#show-product-form").click(function () {
+        if ($("#show-product-form").text() == "Hide") {
+            $("#show-product-form").text("Add new");
+        }
+        else {
+            $("#show-product-form").text("Hide");
+        }
+    });
+</script>
+<script>
+    var app = angular.module("ProductManagement", ["xeditable", "ngMockE2E"]);
 
     // Controller Part
     app.controller("ProductController", function ($scope, $http) {
@@ -171,19 +416,27 @@
 
         // HTTP DELETE- delete order by Id
         // Call: http://localhost:8080/order/{empId}
- /*       $scope.deleteproduct = function (order) {
+        $scope.deleteProduct = function (product) {
             $http({
                 method: 'DELETE',
-                url: '/order/' + order.empId
+                url: '/admin/product?id=' + product.id
             }).then(_success, _error);
         };
-*/
+
+        $scope.saveProduct = function (data) {
+            angular.extend(data);
+            console.log("Save product " + data);
+        }
         // In case of edit
- /*       $scope.editproduct = function (order) {
-            $scope.productForm.productId = order.id;
-            $scope.productForm.productName = order.state;
+        $scope.editProduct = function (product) {
+            $scope.productForm.productId = product.id;
+            $scope.productForm.productName = product.name;
+            $scope.productForm.productCode = product.code;
+            $scope.productForm.productDescription = product.description;
+            $scope.productForm.productQuantity = product.quantity;
+            $scope.productForm.productPrice = product.price;
         };
-*/
+
         // Private Method
         // HTTP GET- get all orders collection
         // Call: http://localhost:8080/orders
@@ -226,32 +479,77 @@
             $scope.productForm.productPrice = "";
         };
     });
-</script>
-</body>
 
-<!--   Core JS Files   -->
-<script src="/admin-dashboard/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
-<script src="/admin-dashboard/assets/js/bootstrap.min.js" type="text/javascript"></script>
 
-<!--  Charts Plugin -->
-<script src="/admin-dashboard/assets/js/chartist.min.js"></script>
 
-<!--  Notifications Plugin    -->
-<script src="/admin-dashboard/assets/js/bootstrap-notify.js"></script>
+    app.controller('Ctrl', function($scope, $filter, $http) {
+        $scope.users = [
+            {id: 1, name: 'awesome user1', status: 2, group: 4, groupName: 'admin'},
+            {id: 2, name: 'awesome user2', status: undefined, group: 3, groupName: 'vip'},
+            {id: 3, name: 'awesome user3', status: 2, group: null}
+        ];
 
-<!--  Google Maps Plugin    -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+        $scope.statuses = [
+            {value: 1, text: 'status1'},
+            {value: 2, text: 'status2'},
+            {value: 3, text: 'status3'},
+            {value: 4, text: 'status4'}
+        ];
 
-<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
-<script src="/admin-dashboard/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+        $scope.groups = [];
+        $scope.loadGroups = function() {
+            return $scope.groups.length ? null : $http.get('/groups').success(function(data) {
+                $scope.groups = data;
+            });
+        };
 
-<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
-<!--<script src="/admin-dashboard/assets/js/demo.js"></script>-->
+        $scope.showGroup = function(user) {
+            if(user.group && $scope.groups.length) {
+                var selected = $filter('filter')($scope.groups, {id: user.group});
+                return selected.length ? selected[0].text : 'Not set';
+            } else {
+                return user.groupName || 'Not set';
+            }
+        };
 
-<script>
-    $(document).ready(function () {
-        $(".nav li").removeClass("active");
-        $("#products").addClass("active")
+        $scope.showStatus = function(user) {
+            var selected = [];
+            if(user.status) {
+                selected = $filter('filter')($scope.statuses, {value: user.status});
+            }
+            return selected.length ? selected[0].text : 'Not set';
+        };
+
+        $scope.checkName = function(data, id) {
+            if (id === 2 && data !== 'awesome') {
+                return "Username 2 should be `awesome`";
+            }
+        };
+
+        $scope.saveUser = function(data, id) {
+            //$scope.user not updated yet
+            angular.extend(data, {id: id});
+            return $http.post('/saveUser', data);
+        };
+
+        // remove user
+        $scope.removeUser = function(index) {
+            $scope.users.splice(index, 1);
+        };
+
+        // add user
+        $scope.addUser = function() {
+            $scope.inserted = {
+                id: $scope.users.length+1,
+                name: '',
+                status: null,
+                group: null
+            };
+            $scope.users.push($scope.inserted);
+        };
     });
+
+
+
 </script>
 </html>

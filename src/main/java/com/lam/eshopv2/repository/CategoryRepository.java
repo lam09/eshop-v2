@@ -18,6 +18,8 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
 
     List<Category> findCategoriesByProduct(Product product);
 
+    Category findCategoryByProductAndName(Product product, String name);
+
     List<Category> findAll();
 
     @Query(value = "select c.name FROM categories c GROUP BY NAME ",nativeQuery = true)

@@ -1,5 +1,6 @@
 package com.lam.eshopv2.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -37,6 +38,7 @@ public class Category implements Serializable {
     @JoinColumn(name = "product_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference
+    @JsonIgnore
     private Product product;
 
     public Category() {

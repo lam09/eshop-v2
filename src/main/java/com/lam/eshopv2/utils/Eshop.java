@@ -17,4 +17,8 @@ public class Eshop {
     public static enum OrderState {
         RECIEVED,PREPARED,SHIPPED,COMPLETED
     }
+
+    public static enum PropertyName {
+        COLOR,MATERIAL,SIZE,
+    }
 }
