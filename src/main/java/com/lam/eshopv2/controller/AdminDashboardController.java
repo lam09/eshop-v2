@@ -55,7 +55,10 @@ public class AdminDashboardController {
         return "/admin-dashboard/accounts";
     }
 
-
+    @RequestMapping("/admin/dennemenu")
+public String dennemenu(){
+        return "/admin-dashboard/dennemenu";
+    }
 
 /*
     @RequestMapping("/admin/products")

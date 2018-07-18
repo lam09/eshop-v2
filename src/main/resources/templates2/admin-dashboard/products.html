@@ -38,9 +38,9 @@
 </head>
 <body>
 
-<div class="wrapper">
+<div class="wrapper" ng-app="app">
     <th:block th:include="/admin-dashboard/container/slidebar"></th:block>
-    <div class="main-panel" ng-app="app">
+    <div class="main-panel">
         <th:block th:include="/admin-dashboard/container/navbar"></th:block>
 
         <div class="content"  ng-controller="ProductController">
@@ -366,190 +366,190 @@
         }
     });
 </script>
-<script>
-    var app = angular.module("ProductManagement", ["xeditable", "ngMockE2E"]);
+<!--<script>-->
+    <!--var app = angular.module("ProductManagement", ["xeditable", "ngMockE2E"]);-->
 
-    // Controller Part
-    app.controller("ProductController", function ($scope, $http) {
+    <!--// Controller Part-->
+    <!--app.controller("ProductController", function ($scope, $http) {-->
 
-        $scope.products = [];
-        $scope.productForm = {
-            productId: 1,
-            productCode: "",
-            productName: "",
-            productDescription: "",
-            productQuantity: "",
-            productPrice: ""
-        };
+        <!--$scope.products = [];-->
+        <!--$scope.productForm = {-->
+            <!--productId: 1,-->
+            <!--productCode: "",-->
+            <!--productName: "",-->
+            <!--productDescription: "",-->
+            <!--productQuantity: "",-->
+            <!--productPrice: ""-->
+        <!--};-->
 
-        // Now load the data from server
-        _refreshProductsData();
+        <!--// Now load the data from server-->
+        <!--_refreshProductsData();-->
 
-        // HTTP POST/PUT methods for add/edit order
-        // Call: http://localhost:8080/order
-        $scope.submitProduct = function () {
+        <!--// HTTP POST/PUT methods for add/edit order-->
+        <!--// Call: http://localhost:8080/order-->
+        <!--$scope.submitProduct = function () {-->
 
-            var method = "";
-            var url = "";
+            <!--var method = "";-->
+            <!--var url = "";-->
 
-            if ($scope.productForm.productId == -1) {
-                method = "POST";
-                url = '/admin/product';
-            } else {
-                method = "PUT";
-                url = '/admin/product';
-            }
+            <!--if ($scope.productForm.productId == -1) {-->
+                <!--method = "POST";-->
+                <!--url = '/admin/product';-->
+            <!--} else {-->
+                <!--method = "PUT";-->
+                <!--url = '/admin/product';-->
+            <!--}-->
 
-            $http({
-                method: method,
-                url: url,
-                data: angular.toJson($scope.productForm),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(_success, _error);
-        };
+            <!--$http({-->
+                <!--method: method,-->
+                <!--url: url,-->
+                <!--data: angular.toJson($scope.productForm),-->
+                <!--headers: {-->
+                    <!--'Content-Type': 'application/json'-->
+                <!--}-->
+            <!--}).then(_success, _error);-->
+        <!--};-->
 
-        $scope.createproduct = function () {
-            _clearFormData();
-        }
+        <!--$scope.createproduct = function () {-->
+            <!--_clearFormData();-->
+        <!--}-->
 
-        // HTTP DELETE- delete order by Id
-        // Call: http://localhost:8080/order/{empId}
-        $scope.deleteProduct = function (product) {
-            $http({
-                method: 'DELETE',
-                url: '/admin/product?id=' + product.id
-            }).then(_success, _error);
-        };
+        <!--// HTTP DELETE- delete order by Id-->
+        <!--// Call: http://localhost:8080/order/{empId}-->
+        <!--$scope.deleteProduct = function (product) {-->
+            <!--$http({-->
+                <!--method: 'DELETE',-->
+                <!--url: '/admin/product?id=' + product.id-->
+            <!--}).then(_success, _error);-->
+        <!--};-->
 
-        $scope.saveProduct = function (data) {
-            angular.extend(data);
-            console.log("Save product " + data);
-        }
-        // In case of edit
-        $scope.editProduct = function (product) {
-            $scope.productForm.productId = product.id;
-            $scope.productForm.productName = product.name;
-            $scope.productForm.productCode = product.code;
-            $scope.productForm.productDescription = product.description;
-            $scope.productForm.productQuantity = product.quantity;
-            $scope.productForm.productPrice = product.price;
-        };
+        <!--$scope.saveProduct = function (data) {-->
+            <!--angular.extend(data);-->
+            <!--console.log("Save product " + data);-->
+        <!--}-->
+        <!--// In case of edit-->
+        <!--$scope.editProduct = function (product) {-->
+            <!--$scope.productForm.productId = product.id;-->
+            <!--$scope.productForm.productName = product.name;-->
+            <!--$scope.productForm.productCode = product.code;-->
+            <!--$scope.productForm.productDescription = product.description;-->
+            <!--$scope.productForm.productQuantity = product.quantity;-->
+            <!--$scope.productForm.productPrice = product.price;-->
+        <!--};-->
 
-        // Private Method
-        // HTTP GET- get all orders collection
-        // Call: http://localhost:8080/orders
-        function _refreshProductsData() {
-            $http({
-                method: 'GET',
-                url: '/admin/products/all'
-            }).then(
-                function (res) { // success
-                    $scope.products = res.data;
-                    console.log(res.data);
-                },
-                function (res) { // error
-                    console.log("Error: " + res.status + " : " + res.data);
-                }
-            );
-        }
-
-
-        function _success(res) {
-            _refreshProductsData();
-            _clearFormData();
-        }
-
-        function _error(res) {
-            var data = res.data;
-            var status = res.status;
-            var header = res.header;
-            var config = res.config;
-            alert("Error: " + status + ":" + data);
-        }
-
-        // Clear the form
-        function _clearFormData() {
-            $scope.productForm.productId = -1;
-            $scope.productForm.productName = "";
-            $scope.productForm.productCode = "";
-            $scope.productForm.productDescription = "";
-            $scope.productForm.productQuantity = "";
-            $scope.productForm.productPrice = "";
-        };
-    });
+        <!--// Private Method-->
+        <!--// HTTP GET- get all orders collection-->
+        <!--// Call: http://localhost:8080/orders-->
+        <!--function _refreshProductsData() {-->
+            <!--$http({-->
+                <!--method: 'GET',-->
+                <!--url: '/admin/products/all'-->
+            <!--}).then(-->
+                <!--function (res) { // success-->
+                    <!--$scope.products = res.data;-->
+                    <!--console.log(res.data);-->
+                <!--},-->
+                <!--function (res) { // error-->
+                    <!--console.log("Error: " + res.status + " : " + res.data);-->
+                <!--}-->
+            <!--);-->
+        <!--}-->
 
 
+        <!--function _success(res) {-->
+            <!--_refreshProductsData();-->
+            <!--_clearFormData();-->
+        <!--}-->
 
-    app.controller('Ctrl', function($scope, $filter, $http) {
-        $scope.users = [
-            {id: 1, name: 'awesome user1', status: 2, group: 4, groupName: 'admin'},
-            {id: 2, name: 'awesome user2', status: undefined, group: 3, groupName: 'vip'},
-            {id: 3, name: 'awesome user3', status: 2, group: null}
-        ];
+        <!--function _error(res) {-->
+            <!--var data = res.data;-->
+            <!--var status = res.status;-->
+            <!--var header = res.header;-->
+            <!--var config = res.config;-->
+            <!--alert("Error: " + status + ":" + data);-->
+        <!--}-->
 
-        $scope.statuses = [
-            {value: 1, text: 'status1'},
-            {value: 2, text: 'status2'},
-            {value: 3, text: 'status3'},
-            {value: 4, text: 'status4'}
-        ];
-
-        $scope.groups = [];
-        $scope.loadGroups = function() {
-            return $scope.groups.length ? null : $http.get('/groups').success(function(data) {
-                $scope.groups = data;
-            });
-        };
-
-        $scope.showGroup = function(user) {
-            if(user.group && $scope.groups.length) {
-                var selected = $filter('filter')($scope.groups, {id: user.group});
-                return selected.length ? selected[0].text : 'Not set';
-            } else {
-                return user.groupName || 'Not set';
-            }
-        };
-
-        $scope.showStatus = function(user) {
-            var selected = [];
-            if(user.status) {
-                selected = $filter('filter')($scope.statuses, {value: user.status});
-            }
-            return selected.length ? selected[0].text : 'Not set';
-        };
-
-        $scope.checkName = function(data, id) {
-            if (id === 2 && data !== 'awesome') {
-                return "Username 2 should be `awesome`";
-            }
-        };
-
-        $scope.saveUser = function(data, id) {
-            //$scope.user not updated yet
-            angular.extend(data, {id: id});
-            return $http.post('/saveUser', data);
-        };
-
-        // remove user
-        $scope.removeUser = function(index) {
-            $scope.users.splice(index, 1);
-        };
-
-        // add user
-        $scope.addUser = function() {
-            $scope.inserted = {
-                id: $scope.users.length+1,
-                name: '',
-                status: null,
-                group: null
-            };
-            $scope.users.push($scope.inserted);
-        };
-    });
+        <!--// Clear the form-->
+        <!--function _clearFormData() {-->
+            <!--$scope.productForm.productId = -1;-->
+            <!--$scope.productForm.productName = "";-->
+            <!--$scope.productForm.productCode = "";-->
+            <!--$scope.productForm.productDescription = "";-->
+            <!--$scope.productForm.productQuantity = "";-->
+            <!--$scope.productForm.productPrice = "";-->
+        <!--};-->
+    <!--});-->
 
 
 
-</script>
+    <!--app.controller('Ctrl', function($scope, $filter, $http) {-->
+        <!--$scope.users = [-->
+            <!--{id: 1, name: 'awesome user1', status: 2, group: 4, groupName: 'admin'},-->
+            <!--{id: 2, name: 'awesome user2', status: undefined, group: 3, groupName: 'vip'},-->
+            <!--{id: 3, name: 'awesome user3', status: 2, group: null}-->
+        <!--];-->
+
+        <!--$scope.statuses = [-->
+            <!--{value: 1, text: 'status1'},-->
+            <!--{value: 2, text: 'status2'},-->
+            <!--{value: 3, text: 'status3'},-->
+            <!--{value: 4, text: 'status4'}-->
+        <!--];-->
+
+        <!--$scope.groups = [];-->
+        <!--$scope.loadGroups = function() {-->
+            <!--return $scope.groups.length ? null : $http.get('/groups').success(function(data) {-->
+                <!--$scope.groups = data;-->
+            <!--});-->
+        <!--};-->
+
+        <!--$scope.showGroup = function(user) {-->
+            <!--if(user.group && $scope.groups.length) {-->
+                <!--var selected = $filter('filter')($scope.groups, {id: user.group});-->
+                <!--return selected.length ? selected[0].text : 'Not set';-->
+            <!--} else {-->
+                <!--return user.groupName || 'Not set';-->
+            <!--}-->
+        <!--};-->
+
+        <!--$scope.showStatus = function(user) {-->
+            <!--var selected = [];-->
+            <!--if(user.status) {-->
+                <!--selected = $filter('filter')($scope.statuses, {value: user.status});-->
+            <!--}-->
+            <!--return selected.length ? selected[0].text : 'Not set';-->
+        <!--};-->
+
+        <!--$scope.checkName = function(data, id) {-->
+            <!--if (id === 2 && data !== 'awesome') {-->
+                <!--return "Username 2 should be `awesome`";-->
+            <!--}-->
+        <!--};-->
+
+        <!--$scope.saveUser = function(data, id) {-->
+            <!--//$scope.user not updated yet-->
+            <!--angular.extend(data, {id: id});-->
+            <!--return $http.post('/saveUser', data);-->
+        <!--};-->
+
+        <!--// remove user-->
+        <!--$scope.removeUser = function(index) {-->
+            <!--$scope.users.splice(index, 1);-->
+        <!--};-->
+
+        <!--// add user-->
+        <!--$scope.addUser = function() {-->
+            <!--$scope.inserted = {-->
+                <!--id: $scope.users.length+1,-->
+                <!--name: '',-->
+                <!--status: null,-->
+                <!--group: null-->
+            <!--};-->
+            <!--$scope.users.push($scope.inserted);-->
+        <!--};-->
+    <!--});-->
+
+
+
+<!--</script>-->
 </html>
