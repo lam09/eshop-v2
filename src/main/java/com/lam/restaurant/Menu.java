@@ -4,15 +4,24 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by a.lam.tuan on 17. 7. 2018.
  */
-public class Menu {
+@Entity
+@Table(name = "menu")
+public class Menu{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
+
+    @Column(name = "date")
     Date date;
+    @OneToMany(mappedBy = "menu")
     List<Food> foodList;
 
     public Menu(){}
@@ -44,7 +53,6 @@ public class Menu {
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
-
         String jsonString = "";
         try {
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -52,7 +60,6 @@ public class Menu {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
         return jsonString;
     }
 

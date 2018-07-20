@@ -42,6 +42,7 @@ public class AdminDashboardRESTController {
     @Autowired
     ProductService productService;
 
+    @CrossOrigin()
     @RequestMapping(value = "/admin/orders/all", method = RequestMethod.GET, //
             produces = {MediaType.APPLICATION_JSON_VALUE, //
                     MediaType.APPLICATION_XML_VALUE})

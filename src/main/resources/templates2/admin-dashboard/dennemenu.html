@@ -46,23 +46,32 @@
     <div class="main-panel">
         <th:block th:include="/admin-dashboard/container/navbar"></th:block>
         <div class="row" style="background-color: #a314ff;text-align:center">
-            <strong><h3><script>document.write("Today is: "+new Date().toDateString())</script></h3></strong>
+            <strong>
+                <h3>
+                    <script>document.write("Today is: " + new Date().toDateString())</script>
+                </h3>
+            </strong>
         </div>
         <div class="content" ng-app="DenneMenuManagement" ng-controller="Ctrl">
-
             <div class="container-fluid">
                 <div class="row">
-                    <button class="btn btn-default" ng-click="addMenu()">Add menu</button>
+                    <div class="row">
+                        <button class="btn btn-md btn-primary" ng-click="addMenu()"> <span class="glyphicon glyphicon-plus"></span></button>
+                        <button class="btn btn-md btn-primary" ng-click="sortMenu()"><span class="glyphicon glyphicon-sort-by-order"></span></button>
+                    </div>
                     <div class="col-md-12" ng-repeat="menu in menuList | reverse">
-                        <div class="card">
-                            <h4>Date: <a href="#" editable-date="menu.date">{{ (menu.date | date: "dd/MM") || 'add date' }}</a></h4>
-                            <div >
-                                <table class="table table-bordered table-hover table-condensed">
+                        <!--<div class="card">-->
+                            <h4>Date: <a href="#" editable-date="menu.date">{{ (menu.date | date: "dd/MM") || 'add date'
+                                }}</a></h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-condensed">
                                     <tr style="font-weight: bold">
                                         <td style="width:20%">Food Name</td>
-                                        <td style="width:10%">Status</td>
+                                        <td style="width:10%">Weight</td>
+                                        <td style="width:10%">Allergens</td>
+                                        <!--<td style="width:10%">Status</td>-->
                                         <td style="width:10%">Group</td>
-                                        <td style="width:30%">Description</td>
+                                        <td style="width:20%">Description</td>
                                         <td style="width:10%">Price</td>
                                         <td style="width:20%">Edit</td>
                                     </tr>
@@ -75,12 +84,22 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <!-- editable status (select-local) -->
-                                            <span editable-select="food.status" e-name="status" e-form="rowform"
-                                                  e-ng-options="s.value as s.text for s in statuses">
-                                                {{ showStatus(food) }}
+                                            <span editable-text="food.weight" e-name="weight" e-form="rowform">
+                                                {{ food.weight|| 'empty' }}
                                             </span>
                                         </td>
+                                        <td>
+                                            <span editable-text="food.allergens" e-name="allergens" e-form="rowform">
+                                                {{ food.allergens || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <!--<td>-->
+                                        <!--&lt;!&ndash; editable status (select-local) &ndash;&gt;-->
+                                        <!--<span editable-select="food.status" e-name="status" e-form="rowform"-->
+                                        <!--e-ng-options="s.value as s.text for s in statuses">-->
+                                        <!--{{ showStatus(food) }}-->
+                                        <!--</span>-->
+                                        <!--</td>-->
                                         <td>
                                             <!-- editable group (select-remote) -->
                                             <span editable-select="food.group" e-name="group" onshow="loadGroups()"
@@ -91,7 +110,7 @@
                                         <td>
                                             <!-- editable username (text with validation) -->
                                             <span editable-text="food.description" e-name="description" e-form="rowform"
-                                                  >
+                                            >
                                                 {{ food.description || 'empty' }}
                                             </span>
                                         </td>
@@ -104,33 +123,34 @@
                                         </td>
 
 
-                                        <td style="white-space: nowrap">
+                                        <td style="white-space:normal">
                                             <!-- form -->
                                             <form editable-form name="rowform" onbeforesave="saveFood($data, food)"
                                                   ng-show="rowform.$visible" class="form-buttons form-inline"
                                                   shown="inserted == food">
                                                 <button type="submit" ng-disabled="rowform.$waiting"
-                                                        class="btn btn-primary">
-                                                    save
+                                                        class="btn btn-sm btn-primary">
+                                                    <span class="glyphicon glyphicon-save"></span>
                                                 </button>
                                                 <button type="button" ng-disabled="rowform.$waiting"
-                                                        ng-click="rowform.$cancel()" class="btn btn-default">
+                                                        ng-click="rowform.$cancel()" class="btn btn-sm btn-default">
                                                     cancel
                                                 </button>
                                             </form>
                                             <div class="buttons" ng-show="!rowform.$visible">
-                                                <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-                                                <button class="btn btn-danger" ng-click="removeFood(menu,$index)">del</button>
+                                                <button class="btn btn-sm btn-primary" ng-click="rowform.$show()"><span class="	glyphicon glyphicon-edit"></span></button>
+                                                <button class="btn btn-sm btn-danger" ng-click="removeFood(menu,$index)"><span class="glyphicon glyphicon-remove"></span>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
 
-                                <button class="btn btn-default" ng-click="addFood(menu)">Add food</button>
-                                <button class="btn btn-default right" ng-click="removeMenu($index)">Remove Menu</button>
+                                <button class="btn btn-md btn-default" ng-click="addFood(menu)">Add food</button>
+                                <button class="btn btn-md btn-danger" ng-click="removeMenu($index)">Remove Menu</button>
 
                             </div>
-                        </div>
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -185,22 +205,22 @@
     });
 
     // --------------- mock $http requests ----------------------
-  /*  app.run(function ($httpBackend) {
-        $httpBackend.whenGET('/groups').respond([
-            {id: 1, text: 'shoup'},
-            {id: 2, text: 'main food'},
-            {id: 3, text: 'desert'},
-            {id: 4, text: 'fruit'}
-        ]);
+    /*  app.run(function ($httpBackend) {
+     $httpBackend.whenGET('/groups').respond([
+     {id: 1, text: 'shoup'},
+     {id: 2, text: 'main food'},
+     {id: 3, text: 'desert'},
+     {id: 4, text: 'fruit'}
+     ]);
 
-        $httpBackend.whenPOST(/\/saveUser/).respond(function (method, url, data) {
-            data = angular.fromJson(data);
-            return [200, {status: 'ok'}];
-        });
-    });*/
+     $httpBackend.whenPOST(/\/saveUser/).respond(function (method, url, data) {
+     data = angular.fromJson(data);
+     return [200, {status: 'ok'}];
+     });
+     });*/
 
-    app.filter('reverse', function() {
-        return function(items) {
+    app.filter('reverse', function () {
+        return function (items) {
             return items.slice().reverse();
         };
     });
@@ -208,17 +228,17 @@
 
 
         $scope.foodList = [
-            {id: 1, name: 'chrumkava kura', status: 2, group: 4, groupName: 'fruit',description:"no description",price:"5.50"},
-            {id: 2, name: 'chrumkava kacica', status: undefined, group: 3, groupName: 'desert',description:"no description",price:"5.50"},
-            {id: 3, name: 'opekane rezance', status: 2, group: null,description:"no description",price:"5.50"}
+            /*    {id: 1, name: 'chrumkava kura', weight:200,allergens:"1,3,5",status: 2, group: 4, groupName: 'fruit',description:"no description",price:"5.50"},
+             {id: 2, name: 'chrumkava kacica',weight:200,allergens:"1,3,5", status: undefined, group: 3, groupName: 'desert',description:"no description",price:"5.50"},
+             {id: 3, name: 'opekane rezance',weight:200,allergens:"1,3,5", status: 2, group: null,description:"no description",price:"5.50"}*/
         ];
 
-
-        $scope.menuList=[{
-            id:1,
-            date:"2018-07-17",
-            foodList:$scope.foodList
+        $scope.menuList = [{
+            id: 1,
+            date: "2018-07-17",
+            foodList: $scope.foodList
         }];
+        _getMenuList();
 
         $scope.statuses = [
             {value: 1, text: 'hot'},
@@ -229,12 +249,12 @@
 
         $scope.groups = [];
 
-    /*    $scope.groups=[
-            {id: 1, text: 'shoup'},
-            {id: 2, text: 'main food'},
-            {id: 3, text: 'desert'},
-            {id: 4, text: 'fruit'}
-        ]*/
+        /*    $scope.groups=[
+         {id: 1, text: 'shoup'},
+         {id: 2, text: 'main food'},
+         {id: 3, text: 'desert'},
+         {id: 4, text: 'fruit'}
+         ]*/
         $scope.loadGroups = function () {
             return $scope.groups.length ? null :
                 $http.get('/groups').then(_success, _error);
@@ -276,20 +296,40 @@
         };
 
         $scope.saveFood = function (data, food) {
-            food=angular.extend(food,data);
+            food = angular.extend(food, data);
             $http({
-                method:'POST',
-                url:'/admin/saveMenu',
-                data:angular.toJson($scope.menuList)
-            })
+                method: 'POST',
+                url: '/admin/saveMenu',
+                data: angular.toJson($scope.menuList)
+            }).then(_updateMenuList, _error());
         };
-        
+
+        function _updateMenuList(data) {
+            console.log("load menuList " + angular.toJson(data.data))
+
+            $scope.menuList = data.data;
+        };
+
+        function _getMenuList() {
+            $http({
+                method: 'GET',
+                url: '/admin/getMenu',
+            }).then(_updateMenuList, _error());
+        };
+
+        $scope.sortMenu = function () {
+            $http({
+                method: 'GET',
+                url: '/admin/getSortedMenu',
+            }).then(_updateMenuList, _error());
+        };
+
         $scope.summitFood = function (data) {
-            console.log("summit food "+angular.toJson(data));
+            console.log("summit food " + angular.toJson(data));
         };
 
         // remove user
-        $scope.removeFood = function (menu,index) {
+        $scope.removeFood = function (menu, index) {
             console.log(angular.toJson(menu.foodList));
             console.log("remove index " + index);
             menu.foodList.splice(index, 1);
@@ -304,36 +344,43 @@
                 name: '',
                 status: null,
                 group: null,
-                description:null,
-                price:0.00
+                description: null,
+                price: 0.00
             };
             menu.foodList.push($scope.inserted);
         };
-        
+
         $scope.addMenu = function () {
-            $scope.newMenu={
-                date:"",
-                foodList:
-                    [
-                        {id: 1, name: 'insert new food', status: 2, group: 4, groupName: 'fruit',description:"add description",price:"0.00"}
-                    ]
+            $scope.newMenu = {
+                date: "",
+                foodList: [
+                    {
+                        id: 1,
+                        name: 'insert new food',
+                        status: 2,
+                        group: 4,
+                        groupName: 'fruit',
+                        description: "add description",
+                        price: "0.00"
+                    }
+                ]
             };
             $scope.menuList.push($scope.newMenu);
         }
         $scope.removeMenu = function (index) {
 
-            i=$scope.menuList.length-index-1;//reverse iterate
+            i = $scope.menuList.length - index - 1;//reverse iterate
 
-            $scope.menuList.splice(i,1);
+            $scope.menuList.splice(i, 1);
         }
-        $scope.$watch('$scope.menuList',function (newVal,oldVal) {
+        $scope.$watch('$scope.menuList', function (newVal, oldVal) {
             console.log("menuList changed");
         })
-        
+
         $scope.saveMenu = function () {
             $http({
-                method:'POST',
-                url:'/admin/saveMenu',
+                method: 'POST',
+                url: '/admin/saveMenu',
                 data: angular.toJson($scope.menuList),
                 headers: {
                     'Content-Type': 'application/json'

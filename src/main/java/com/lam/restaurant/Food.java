@@ -1,15 +1,73 @@
 package com.lam.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * Created by a.lam.tuan on 17. 7. 2018.
  */
-public class Food {
+
+@Entity
+@Table(name = "food")
+public class Food{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
+    @Column(name = "weight")
+    Integer weight=0; // in gram
+    @Column(name = "allergens")
+    String allergens="";
+    @Column(name = "name")
     String name;
+    @Column(name = "description")
     String description;
+    @Column(name = "price")
     Double price;
-    String group;
+    @Column(name = "groupName")
+    String groupName;
+    @Column(name = "status")
     String status;
+
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
+    @JsonIgnore
+    Menu menu;
+
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    public String getAllergens() {
+        return allergens;
+    }
+
+    public void setAllergens(String allergens) {
+        this.allergens = allergens;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
 
     public String getStatus() {
         return status;
@@ -54,11 +112,11 @@ public class Food {
     }
 
     public String getGroup() {
-        return group;
+        return groupName;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setGroup(String groupName) {
+        this.groupName = groupName;
     }
 
 
