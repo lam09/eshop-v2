@@ -1,0 +1,352 @@
+<!doctype html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/png" href="/admin-dashboard/assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <title>Light Bootstrap Dashboard by Creative Tim</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+    <meta name="viewport" content="width=device-width"/>
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="/admin-dashboard/assets/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Animation library for notifications   -->
+    <link href="/admin-dashboard/assets/css/animate.min.css" rel="stylesheet"/>
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="/admin-dashboard/assets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
+
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <!--<link href="/admin-dashboard/assets/css/demo.css" rel="stylesheet"/>-->
+
+
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="/admin-dashboard/assets/css/pe-icon-7-stroke.css" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+    <script src="/admin-dashboard/assets/js/angular-ui-router.js"></script>
+    <!--     Editable cell     -->
+    <link href="/admin-dashboard/assets/dist/css/xeditable.css" rel="stylesheet">
+    <script src="/admin-dashboard/assets/dist/js/xeditable.js"></script>
+
+    <!--Tags Input-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.css" rel="stylesheet"
+          media="screen">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.bootstrap.min.css"
+          rel="stylesheet" media="screen">
+
+    <!--MultiSelect-->
+    <script src="/admin-dashboard/assets/js/angular-bootstrap-multiselect.min.js"></script>
+</head>
+<body>
+<!--<input id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+<div class="wrapper">
+    <th:block th:include="/admin-dashboard/container/slidebar"></th:block>
+    <div class="main-panel">
+        <th:block th:include="/admin-dashboard/container/navbar"></th:block>
+
+        <div class="content" ng-app="app">
+            <div class="container-fluid" ng-controller="ProductController">
+                <form ng-submit="submitProduct()">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <button id="show-product-form" type="button" class="btn btn-info" data-toggle="collapse"
+                                    data-target="#add-product-form">Product Info
+                            </button>
+                            <div id="add-product-form" class="collapse">
+                                <div class="card">
+                                    <div class="content">
+                                        <div class="form-group">
+                                            <label for="productName">Product Name:</label>
+                                            <input type="text" class="form-control" id="productName"
+                                                   ng-model="productForm.name"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productPrice">Price:</label>
+                                            <input type="text" class="form-control" id="productPrice"
+                                                   ng-model="productForm.price"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productDescription">Description:</label>
+                                            <textarea cols="40" rows="5" type="text" class="form-control"
+                                                      id="productDescription"
+                                                      ng-model="productForm.description"/></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productCode">Code:</label>
+                                            <input type="text" class="form-control" id="productCode"
+                                                   ng-model="productForm.code"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="productQuantity">Quantity:</label>
+                                            <input type="text" class="form-control" id="productQuantity"
+                                                   ng-model="productForm.quantity"/>
+                                        </div>
+                                        <!--<button type="submit" class="btn btn-default" id="btn_submit">SAVE</button>-->
+                                        <!--</form>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="header">
+                                    <h6 class="title">Image</h6>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="file" class="form-control" multiple file-model="productForm.files"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <button type="submit" class="btn btn-default" id="btn_submit">SAVE</button>
+                </form>
+            </div>
+        </div>
+
+
+        <th:block th:include="/admin-dashboard/container/footer"></th:block>
+
+
+    </div>
+</div>
+
+
+</body>
+
+<!--   Core JS Files   -->
+<script src="/admin-dashboard/assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="/admin-dashboard/assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="/admin-dashboard/assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="/admin-dashboard/assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="/admin-dashboard/assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<!--<script src="/admin-dashboard/assets/js/demo.js"></script>-->
+
+<script>
+
+
+    //    var csrfValue= $("#csrfToken").val();
+    //    console.log( + " " + csrfValue);
+
+    var app = angular.module("app", ["xeditable", "ngTagsInput", 'ui.router', 'btorfs.multiselect']);
+
+    // DIRECTIVE - FILE MODEL
+    app.directive('fileModel', ['$parse', function ($parse) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                var model = $parse(attrs.fileModel);
+                var modelSetter = model.assign;
+
+                element.bind('change', function () {
+                    scope.$apply(function () {
+                        modelSetter(scope, element[0].files[0]);
+                    });
+                });
+            }
+        };
+
+    }]);
+
+
+    app.controller("ProductController", function ($scope, $http) {
+            //      $scope._csrfParameterName=angular.element('$csrfToken').name();
+            //      $scope._csrfValue=angular.element('$csrfToken').val();
+
+            //    console.log($scope._csrfParameterName + " " + $scope._csrfValue);
+            var urlParams = new URLSearchParams(window.location.search);
+            $scope.productId = urlParams.get('id');
+            $scope.productForm = {
+                id: $scope.productId,
+                code: "",
+                name: "",
+                description: "",
+                quantity: "",
+                price: "",
+                category: [],
+                files: []
+            };
+
+            $scope.allCategory = [];
+            // Now load the data from server
+            _refreshProductData($scope.productId);
+            _getAllCategory();
+            // HTTP POST/PUT methods for add/edit order
+            // Call: http://localhost:8080/order
+            $scope.submitProduct = function () {
+
+                var method = "";
+                var url = "";
+
+                if ($scope.productForm.productId == -1) {
+                    method = "POST";
+                    url = '/admin/product';
+                } else {
+                    method = "POST";
+                    url = '/admin/product';
+                }
+
+                method = "POST";
+                url = '/saveProductMongo';
+
+                var data = $scope.productForm;
+
+                console.log("sent data " + data);
+                //   data.append("_csrf",csrfValue);
+
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson($scope.productForm),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(_success, _error);
+            };
+
+            // HTTP DELETE- delete order by Id
+            // Call: http://localhost:8080/order/{empId}
+            $scope.deleteProduct = function (product) {
+                $http({
+                    method: 'DELETE',
+                    url: '/admin/product?id=' + product.id
+                }).then(_success, _error);
+            };
+
+            $scope.saveProduct = function (data, product) {
+                angular.extend(data);
+                $scope.productForm.id = product.id;
+                $scope.productForm.name = data.name;
+                $scope.productForm.code = product.code;
+                $scope.productForm.description = data.description;
+                $scope.productForm.quantity = data.quantity;
+                $scope.productForm.price = data.price;
+
+                $http({
+                    method: 'PUT',
+                    url: '/admin/product',
+                    data: angular.toJson($scope.productForm),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(_success, _error);
+            }
+            // In case of edit
+            $scope.editProduct = function (product) {
+                $scope.productForm.id = product.id;
+                $scope.productForm.name = product.name;
+                $scope.productForm.code = product.code;
+                $scope.productForm.description = product.description;
+                $scope.productForm.quantity = product.quantity;
+                $scope.productForm.price = product.price;
+            };
+
+            // Private Method
+            // HTTP GET- get all orders collection
+            // Call: http://localhost:8080/orders
+            function _refreshProductData(id) {
+                $http({
+                    method: 'GET',
+                    url: '/admin/product/detail?id=' + id
+                }).then(
+                    function (res) { // success
+                        $scope.productForm = res.data;
+                        console.log(res.data);
+                    },
+                    function (res) { // error
+                        console.log("Error: " + res.status + " : " + res.data);
+                    }
+                );
+            }
+
+            function _getAllCategory() {
+                $http({
+                    method: 'GET',
+                    url: '/admin/category/all'
+                }).then(
+                    function (res) { // success
+                        $scope.allCategory = res.data;
+                        console.log(res.data);
+                    },
+                    function (res) { // error
+                        console.log("Error: " + res.status + " : " + res.data);
+                    }
+                );
+            }
+
+            function _success(res) {
+                _refreshProductData($scope.productId);
+            }
+
+            function _error(res) {
+                var data = res.data;
+                var status = res.status;
+                var header = res.header;
+                var config = res.config;
+                alert("Error: " + status + ":" + data);
+            }
+
+
+            $scope.user = {
+                tags: [
+                    {text: 'Tag1'},
+                    {text: 'Tag2'},
+                    {text: 'Tag3'}
+                ]
+            };
+
+            $scope.addCategory = function (name) {
+                console.log(name);
+                $http({
+                    method: 'POST',
+                    url: '/admin/category?productId=' + $scope.productId + '&name=' + name
+                })
+            }
+
+            $scope.refreshCategory = function () {
+                return $http.get('/admin/category?productId=' + $scope.productId);
+            };
+            $scope.saveCategory = function (name) {
+                return $http.post('/admin/category?productId=' + $scope.productId + '&name=' + name);
+            };
+        }
+    );
+
+    /*
+     app.controller('NgTagsCtrl', function($scope, $http) {
+     $scope.user = {
+     tags: [
+     { text: 'Tag1' },
+     { text: 'Tag2' },
+     { text: 'Tag3' }
+     ],
+     };
+
+     $scope.loadTags = function(query) {
+     return $http.get('/tags?query=' + query);
+     };
+     });*/
+</script>
+
+</html>

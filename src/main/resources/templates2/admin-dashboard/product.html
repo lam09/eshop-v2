@@ -47,7 +47,7 @@
     <script src="/admin-dashboard/assets/js/angular-bootstrap-multiselect.min.js"></script>
 </head>
 <body>
-
+<input id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 <div class="wrapper">
     <th:block th:include="/admin-dashboard/container/slidebar"></th:block>
     <div class="main-panel">
@@ -167,8 +167,17 @@
 <!--<script src="/admin-dashboard/assets/js/demo.js"></script>-->
 
 <script>
+
+
+    var csrfValue= $("#csrfToken").val();
+    console.log( + " " + csrfValue);
+
     var app = angular.module("app", ["xeditable", "ngTagsInput",'ui.router','btorfs.multiselect']);
     app.controller("ProductController", function ($scope, $http) {
+  //      $scope._csrfParameterName=angular.element('$csrfToken').name();
+  //      $scope._csrfValue=angular.element('$csrfToken').val();
+
+        console.log($scope._csrfParameterName + " " + $scope._csrfValue);
         var urlParams = new URLSearchParams(window.location.search);
         $scope.productId=urlParams.get('id');
         $scope.productForm = {

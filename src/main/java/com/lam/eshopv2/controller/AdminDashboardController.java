@@ -42,7 +42,7 @@ public class AdminDashboardController {
 
     @RequestMapping("/admin/productDetail")
     public String productDetail(@RequestParam("id")Integer id){
-        return "/admin-dashboard/product";
+        return "/admin-dashboard/productMongo";
     }
 
     @RequestMapping("/admin/icons")
@@ -56,7 +56,7 @@ public class AdminDashboardController {
     }
 
     @RequestMapping("/admin/dennemenu")
-public String dennemenu(){
+    public String dennemenu(){
         return "/admin-dashboard/dennemenu";
     }
 

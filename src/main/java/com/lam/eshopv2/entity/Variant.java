@@ -1,5 +1,6 @@
 package com.lam.eshopv2.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,6 +23,11 @@ public class Variant {
 
     @Column(name = "value")
     private String value;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonIgnore
+    Product product;
 
     public String getName() {
         return name;
@@ -47,10 +53,6 @@ public class Variant {
         this.product = product;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
 
-    @JoinColumn(name = "product_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    Product product;
 
 }
