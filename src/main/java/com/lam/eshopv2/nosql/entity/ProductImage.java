@@ -1,11 +1,14 @@
 package com.lam.eshopv2.nosql.entity;
 
+import org.bson.types.Binary;
+
 /**
  * Created by a.lam.tuan on 2. 8. 2018.
  */
 public class ProductImage {
     String imageSize;
-    byte[] image;
+    Binary image;
+    String id;
 
     public String getImageSize() {
         return imageSize;
@@ -15,11 +18,19 @@ public class ProductImage {
         this.imageSize = imageSize;
     }
 
-    public byte[] getImage() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Binary getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(Binary image) {
         this.image = image;
     }
 }

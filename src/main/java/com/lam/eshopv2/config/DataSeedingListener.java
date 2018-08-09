@@ -4,6 +4,7 @@ import com.lam.eshopv2.entity.Account;
 import com.lam.eshopv2.entity.PaymentMethod;
 import com.lam.eshopv2.entity.Role;
 import com.lam.eshopv2.entity.ShippingMethod;
+import com.lam.eshopv2.nosql.repo.ProductRepo;
 import com.lam.eshopv2.repository.AccountRepository;
 import com.lam.eshopv2.repository.PaymentMethodRepository;
 import com.lam.eshopv2.repository.RoleRepository;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 /**
  * Created by a.lam.tuan on 11. 6. 2018.
@@ -37,6 +39,8 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
 
     @Autowired
     private ShippingMethodRepository shippingMethodRepository;
+    @Autowired
+    private ProductRepo productRepo;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent arg0) {
@@ -103,6 +107,14 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             user.setRoles(roles);
             userRepository.save(user);
         }*/
+
+ /*    productRepo.findAll().stream().forEach(productCollection -> {
+         productCollection.getProductImages().stream().forEach(i->{
+             if(i.getId()==null) i.setId(UUID.randomUUID().toString());
+         });
+         productRepo.save(productCollection);
+     });
+*/
     }
 
 }

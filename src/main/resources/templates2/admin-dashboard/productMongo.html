@@ -45,18 +45,24 @@
 
     <!--MultiSelect-->
     <script src="/admin-dashboard/assets/js/angular-bootstrap-multiselect.min.js"></script>
+    <script src="/js/dropzone/dropzone.js"></script>
+    <script src="/js/dropzone/app.js"></script>
+    <script src="/js/dropzone/fileAppControllers.js"></script>
+    <script src="/js/dropzone/fileAppDirectives.js"></script>
+    <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+
 </head>
-<body>
+<body ng-app="app">
 <!--<input id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 <div class="wrapper">
     <th:block th:include="/admin-dashboard/container/slidebar"></th:block>
     <div class="main-panel">
         <th:block th:include="/admin-dashboard/container/navbar"></th:block>
 
-        <div class="content" ng-app="app">
+        <div class="content">
             <div class="container-fluid" ng-controller="ProductController">
-                <form ng-submit="submitProduct()">
-                    <div class="row">
+                <div class="row">
+                    <form>
                         <div class="col-md-8">
                             <button id="show-product-form" type="button" class="btn btn-info" data-toggle="collapse"
                                     data-target="#add-product-form">Product Info
@@ -90,27 +96,38 @@
                                             <input type="text" class="form-control" id="productQuantity"
                                                    ng-model="productForm.quantity"/>
                                         </div>
-                                        <!--<button type="submit" class="btn btn-default" id="btn_submit">SAVE</button>-->
-                                        <!--</form>-->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="header">
-                                    <h6 class="title">Image</h6>
-                                </div>
-
-                                <div class="form-group">
-                                    <input type="file" class="form-control" multiple file-model="productForm.files"/>
-                                </div>
+                        <div>
+                            <button type="submit" class="btn btn-default" id="btn_submit" ng-click="doUploadFile()">SAVE PRODUCT</button>
+                        </div>
+                    </form>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="header">
+                                <h6 class="title">Product Gallery</h6>
+                            </div>
+                            <!--<div class="form-group">-->
+                            <input type="file" multiple file-model="files"/><br/>
+                            <button ng-click="uploadFile()">UPLOAD</button>
+                            <div>
+                                <table class="table table-hover table-striped table-condensed">
+                                    <tbody>
+                                    <tr ng-repeat="image in productForm.productImages">
+                                        <td>
+                                            <img data-ng-src="data:image/JPEG;base64,{{image.image.data}}">
+                                            <button ng-click="deleteImage(image)">delete</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-
                     </div>
-                    <button type="submit" class="btn btn-default" id="btn_submit">SAVE</button>
-                </form>
+                </div>
+
             </div>
         </div>
 
@@ -149,8 +166,12 @@
     //    var csrfValue= $("#csrfToken").val();
     //    console.log( + " " + csrfValue);
 
-    var app = angular.module("app", ["xeditable", "ngTagsInput", 'ui.router', 'btorfs.multiselect']);
+    //   var app = angular.module("app", ["xeditable", "ngTagsInput", 'ui.router', 'btorfs.multiselect']);
+    var app = angular.module('app', []).config(['$compileProvider', function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|ftp|blob):|data:image\//);
+    }]);
 
+    // DIRECTIVE - FILE MODEL
     // DIRECTIVE - FILE MODEL
     app.directive('fileModel', ['$parse', function ($parse) {
         return {
@@ -161,20 +182,16 @@
 
                 element.bind('change', function () {
                     scope.$apply(function () {
-                        modelSetter(scope, element[0].files[0]);
+                        modelSetter(scope, element[0].files);
                     });
                 });
             }
         };
-
     }]);
 
-
     app.controller("ProductController", function ($scope, $http) {
-            //      $scope._csrfParameterName=angular.element('$csrfToken').name();
-            //      $scope._csrfValue=angular.element('$csrfToken').val();
+            $scope.uploadResult = "";
 
-            //    console.log($scope._csrfParameterName + " " + $scope._csrfValue);
             var urlParams = new URLSearchParams(window.location.search);
             $scope.productId = urlParams.get('id');
             $scope.productForm = {
@@ -184,11 +201,70 @@
                 description: "",
                 quantity: "",
                 price: "",
-                category: [],
-                files: []
+                variant: [],
+                properties: [],
+                productImages: []
+            };
+            $scope.files=[];
+            $scope.allCategory = [];
+
+            $scope.saveProductInformation=function () {
+                $http({
+                    method: 'PUT',
+                    url: '/saveProductMongo',
+                    data: angular.toJson($scope.productForm),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
             };
 
-            $scope.allCategory = [];
+            $scope.uploadFile = function () {
+                console.log("doing upload file");
+                var url = "/saveProductMongo";
+                var data = new FormData();
+                for (i = 0; i < $scope.files.length; i++) {
+                    data.append("files", $scope.files[i]);
+                }
+                var config = {
+                    transformRequest: angular.identity,
+                    transformResponse: angular.identity,
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                };
+                $http.post(url, data, config).then(
+                    // Success
+                    function (response) {
+                        $scope.uploadResult = response.data;
+                    },
+                    // Error
+                    function (response) {
+                        $scope.uploadResult = response.data;
+                    });
+            };
+
+            $scope.doGetFiles = function () {
+                var url = "/api/getallfiles";
+                $http.get(url).then(function (response) {
+                    $scope.lstFiles = response.data;
+                }, function (response) {
+                    alert(response.data);
+                });
+            };
+            $scope.deleteImage=function(image){
+                method='DELETE';
+                url='/deleteImageMongo/'+image.id;
+                $http({
+                    method:'DELETE',
+                    url:'/deleteImageMongo/'+image.id
+            }).onSuccess(function () {
+                    $scope.productForm.productImages.splice(image);
+                });
+        };
+                /*Upload file finished*/
+            //    console.log($scope._csrfParameterName + " " + $scope._csrfValue);
+
             // Now load the data from server
             _refreshProductData($scope.productId);
             _getAllCategory();
@@ -222,7 +298,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                }).then(_success, _error);
+                });
             };
 
             // HTTP DELETE- delete order by Id
@@ -251,7 +327,7 @@
                         'Content-Type': 'application/json'
                     }
                 }).then(_success, _error);
-            }
+            };
             // In case of edit
             $scope.editProduct = function (product) {
                 $scope.productForm.id = product.id;
@@ -268,7 +344,8 @@
             function _refreshProductData(id) {
                 $http({
                     method: 'GET',
-                    url: '/admin/product/detail?id=' + id
+                    // url: '/admin/product/detail?id=' + id
+                    url: '/getProductMongo/' + id
                 }).then(
                     function (res) { // success
                         $scope.productForm = res.data;

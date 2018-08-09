@@ -9,6 +9,6 @@ import com.lam.eshopv2.nosql.entity.*;
 
 // This is an Interface.
 // No need Annotation here
-public interface ProductRepo extends MongoRepository<ProductCollection, Integer> { // Long: Type of Employee ID.
-
+public interface ProductRepo extends MongoRepository<ProductCollection, Integer> {
+    ProductCollection findProductCollectionById(Integer id);
 }

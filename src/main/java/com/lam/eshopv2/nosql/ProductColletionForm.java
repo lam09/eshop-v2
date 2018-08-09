@@ -43,7 +43,17 @@ public class ProductColletionForm {
 
     private MultipartFile[] files;
 
+    private MultipartFile singleFile;
+
     public ProductColletionForm() {
+    }
+
+    public MultipartFile getSingleFile() {
+        return singleFile;
+    }
+
+    public void setSingleFile(MultipartFile singleFile) {
+        this.singleFile = singleFile;
     }
 
     public Integer getId() {

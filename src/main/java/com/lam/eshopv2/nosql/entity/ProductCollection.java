@@ -22,19 +22,15 @@ public class ProductCollection {
     @Field(value = "Code")
     private String code;
 
-    @Indexed(unique = true)
     @Field(value = "Name")
     private String name;
 
-    @Indexed(unique = true)
     @Field(value = "Price")
     private double price;
 
-    @Indexed(unique = true)
     @Field(value = "Quantity")
     private Integer quantity;
 
-    @Indexed(unique = true)
     @Field(value = "Create_Date")
     private Date createDate;
 
