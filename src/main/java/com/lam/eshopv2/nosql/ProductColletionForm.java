@@ -34,6 +34,7 @@ public class ProductColletionForm {
 
     private Date createDate;
 
+    private boolean active;
 
     private String description;
 
@@ -46,6 +47,14 @@ public class ProductColletionForm {
     private MultipartFile singleFile;
 
     public ProductColletionForm() {
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public MultipartFile getSingleFile() {

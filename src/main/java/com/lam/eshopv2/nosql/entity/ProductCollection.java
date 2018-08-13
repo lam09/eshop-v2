@@ -46,7 +46,18 @@ public class ProductCollection {
     @Field(value = "variants")
     private List<Variant> variants;
 
+    @Field(value = "active")
+    private boolean active;
+
     public ProductCollection() {
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Integer getId() {

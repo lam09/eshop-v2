@@ -62,48 +62,46 @@
         <div class="content">
             <div class="container-fluid" ng-controller="ProductController">
                 <div class="row">
-                    <form>
-                        <div class="col-md-8">
-                            <button id="show-product-form" type="button" class="btn btn-info" data-toggle="collapse"
-                                    data-target="#add-product-form">Product Info
-                            </button>
-                            <div id="add-product-form" class="collapse">
-                                <div class="card">
-                                    <div class="content">
-                                        <div class="form-group">
-                                            <label for="productName">Product Name:</label>
-                                            <input type="text" class="form-control" id="productName"
-                                                   ng-model="productForm.name"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="productPrice">Price:</label>
-                                            <input type="text" class="form-control" id="productPrice"
-                                                   ng-model="productForm.price"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="productDescription">Description:</label>
-                                            <textarea cols="40" rows="5" type="text" class="form-control"
-                                                      id="productDescription"
-                                                      ng-model="productForm.description"/></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="productCode">Code:</label>
-                                            <input type="text" class="form-control" id="productCode"
-                                                   ng-model="productForm.code"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="productQuantity">Quantity:</label>
-                                            <input type="text" class="form-control" id="productQuantity"
-                                                   ng-model="productForm.quantity"/>
-                                        </div>
+                    <div class="col-md-8">
+                        <button id="show-product-form" type="button" class="btn btn-info" data-toggle="collapse"
+                                data-target="#add-product-form">Product Info
+                        </button>
+                        <div id="add-product-form" class="collapse">
+                            <div class="card">
+                                <div class="content">
+                                    <div class="form-group">
+                                        <label for="productName">Product Name:</label>
+                                        <input type="text" class="form-control" id="productName"
+                                               ng-model="productForm.name"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productPrice">Price:</label>
+                                        <input type="text" class="form-control" id="productPrice"
+                                               ng-model="productForm.price"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productDescription">Description:</label>
+                                        <textarea cols="40" rows="5" type="text" class="form-control"
+                                                  id="productDescription"
+                                                  ng-model="productForm.description"/></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productCode">Code:</label>
+                                        <input type="text" class="form-control" id="productCode"
+                                               ng-model="productForm.code"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productQuantity">Quantity:</label>
+                                        <input type="text" class="form-control" id="productQuantity"
+                                               ng-model="productForm.quantity"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <button type="submit" class="btn btn-default" id="btn_submit" ng-click="doUploadFile()">SAVE PRODUCT</button>
-                        </div>
-                    </form>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-default save-btn" ng-click="saveProductInformation()">SAVE</button>
+                    </div>
                     <div class="col-md-8">
                         <div class="card">
                             <div class="header">
@@ -205,12 +203,12 @@
                 properties: [],
                 productImages: []
             };
-            $scope.files=[];
+            $scope.files = [];
             $scope.allCategory = [];
 
-            $scope.saveProductInformation=function () {
+            $scope.saveProductInformation = function () {
                 $http({
-                    method: 'PUT',
+                    method: 'POST',
                     url: '/saveProductMongo',
                     data: angular.toJson($scope.productForm),
                     headers: {
@@ -252,96 +250,23 @@
                     alert(response.data);
                 });
             };
-            $scope.deleteImage=function(image){
-                method='DELETE';
-                url='/deleteImageMongo/'+image.id;
+            $scope.deleteImage = function (image) {
+                method = 'DELETE';
+                url = '/deleteImageMongo/' + image.id;
                 $http({
-                    method:'DELETE',
-                    url:'/deleteImageMongo/'+image.id
-            }).onSuccess(function () {
+                    method: 'DELETE',
+                    url: '/deleteImageMongo/' + image.id
+                }).onSuccess(function () {
                     $scope.productForm.productImages.splice(image);
                 });
-        };
+            };
                 /*Upload file finished*/
             //    console.log($scope._csrfParameterName + " " + $scope._csrfValue);
 
             // Now load the data from server
-            _refreshProductData($scope.productId);
-            _getAllCategory();
-            // HTTP POST/PUT methods for add/edit order
-            // Call: http://localhost:8080/order
-            $scope.submitProduct = function () {
+            _getProductData($scope.productId);
 
-                var method = "";
-                var url = "";
-
-                if ($scope.productForm.productId == -1) {
-                    method = "POST";
-                    url = '/admin/product';
-                } else {
-                    method = "POST";
-                    url = '/admin/product';
-                }
-
-                method = "POST";
-                url = '/saveProductMongo';
-
-                var data = $scope.productForm;
-
-                console.log("sent data " + data);
-                //   data.append("_csrf",csrfValue);
-
-                $http({
-                    method: method,
-                    url: url,
-                    data: angular.toJson($scope.productForm),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-            };
-
-            // HTTP DELETE- delete order by Id
-            // Call: http://localhost:8080/order/{empId}
-            $scope.deleteProduct = function (product) {
-                $http({
-                    method: 'DELETE',
-                    url: '/admin/product?id=' + product.id
-                }).then(_success, _error);
-            };
-
-            $scope.saveProduct = function (data, product) {
-                angular.extend(data);
-                $scope.productForm.id = product.id;
-                $scope.productForm.name = data.name;
-                $scope.productForm.code = product.code;
-                $scope.productForm.description = data.description;
-                $scope.productForm.quantity = data.quantity;
-                $scope.productForm.price = data.price;
-
-                $http({
-                    method: 'PUT',
-                    url: '/admin/product',
-                    data: angular.toJson($scope.productForm),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(_success, _error);
-            };
-            // In case of edit
-            $scope.editProduct = function (product) {
-                $scope.productForm.id = product.id;
-                $scope.productForm.name = product.name;
-                $scope.productForm.code = product.code;
-                $scope.productForm.description = product.description;
-                $scope.productForm.quantity = product.quantity;
-                $scope.productForm.price = product.price;
-            };
-
-            // Private Method
-            // HTTP GET- get all orders collection
-            // Call: http://localhost:8080/orders
-            function _refreshProductData(id) {
+            function _getProductData(id) {
                 $http({
                     method: 'GET',
                     // url: '/admin/product/detail?id=' + id
@@ -357,73 +282,16 @@
                 );
             }
 
-            function _getAllCategory() {
-                $http({
-                    method: 'GET',
-                    url: '/admin/category/all'
-                }).then(
-                    function (res) { // success
-                        $scope.allCategory = res.data;
-                        console.log(res.data);
-                    },
-                    function (res) { // error
-                        console.log("Error: " + res.status + " : " + res.data);
-                    }
-                );
-            }
-
             function _success(res) {
-                _refreshProductData($scope.productId);
+                _getProductData($scope.productId);
             }
 
             function _error(res) {
-                var data = res.data;
-                var status = res.status;
-                var header = res.header;
-                var config = res.config;
-                alert("Error: " + status + ":" + data);
+                alert("Error: " + ":" + data);
             }
-
-
-            $scope.user = {
-                tags: [
-                    {text: 'Tag1'},
-                    {text: 'Tag2'},
-                    {text: 'Tag3'}
-                ]
-            };
-
-            $scope.addCategory = function (name) {
-                console.log(name);
-                $http({
-                    method: 'POST',
-                    url: '/admin/category?productId=' + $scope.productId + '&name=' + name
-                })
-            }
-
-            $scope.refreshCategory = function () {
-                return $http.get('/admin/category?productId=' + $scope.productId);
-            };
-            $scope.saveCategory = function (name) {
-                return $http.post('/admin/category?productId=' + $scope.productId + '&name=' + name);
-            };
         }
     );
 
-    /*
-     app.controller('NgTagsCtrl', function($scope, $http) {
-     $scope.user = {
-     tags: [
-     { text: 'Tag1' },
-     { text: 'Tag2' },
-     { text: 'Tag3' }
-     ],
-     };
-
-     $scope.loadTags = function(query) {
-     return $http.get('/tags?query=' + query);
-     };
-     });*/
 </script>
 
 </html>

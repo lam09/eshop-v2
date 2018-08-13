@@ -58,23 +58,29 @@ public class Controller {
             productRepo.save(productCollection);
             Utils.setCurrentProductCollection(productCollection,request);
         });
-//        images.remove(image.get());
             return new ResponseEntity<String>("",HttpStatus.OK);
     }
 
-    @PostMapping("/saveProductMongo")
-    public ResponseEntity<?> saveProduct(@ModelAttribute ProductColletionForm form){
-        ProductCollection productCollection= new ProductCollection();
-        productCollection.setId(form.getId());
+    @PostMapping(value = "/saveProductMongo",
+    produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> saveProduct(@ModelAttribute ProductColletionForm form,HttpServletRequest request){
+        ProductCollection productCollection=Utils.getProcductCollectionInSession(request);
+        //productCollection.setId(form.getId());
         productCollection.setCode(form.getCode());
         productCollection.setCreateDate(form.getCreateDate());
         productCollection.setDescription(form.getDescription());
         productCollection.setPrice(form.getPrice());
+        productCollection.setVariants(form.getVariants());
+        productCollection.setProperties(form.getProperties());
         productRepo.save(productCollection);
         return new ResponseEntity<String>("Saved to server " , HttpStatus.OK);
     }
 
+    @PutMapping("saveProductInformation")
+    public void saveProductInformation(@ModelAttribute ProductCollection product,HttpServletRequest request){
+        ProductCollection productCollection=Utils.getProcductCollectionInSession(request);
 
+    }
 
     @PostMapping("/uploadImage")
     private ResponseEntity<?> saveUploadedFiles(@ModelAttribute MultipartFile[] files,HttpServletRequest request) throws IOException {
@@ -89,18 +95,14 @@ public class Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Ia a log");
             images.add(image);
         });
         productCollection.setProductImages(images);
         productRepo.save(productCollection);
-        // Make sure directory exists!
-
-
         return new ResponseEntity<String>("Saved to server " , HttpStatus.OK);
     }
     public void saveToFile(MultipartFile[]files){
-     
+
     }
     public String toJson(Object o){
         ObjectMapper mapper = new ObjectMapper();

@@ -3867,3 +3867,10 @@ fieldset[disabled] .btn-neutral.active {
         -webkit-overflow-scrolling: touch;
     }
 }
+.save-btn{
+    position: fixed;
+    top: 10%;
+    right: 10%;
+
+}
+

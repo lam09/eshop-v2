@@ -8,6 +8,10 @@ import org.bson.types.Binary;
 public class ProductImage {
     String imageSize;
     Binary image;
+    Binary image10;
+    Binary image30;
+    Binary image50;
+
     String id;
 
     public String getImageSize() {
@@ -32,5 +36,29 @@ public class ProductImage {
 
     public void setImage(Binary image) {
         this.image = image;
+    }
+
+    public Binary getImage10() {
+        return image10;
+    }
+
+    public void setImage10(Binary image10) {
+        this.image10 = image10;
+    }
+
+    public Binary getImage30() {
+        return image30;
+    }
+
+    public void setImage30(Binary image30) {
+        this.image30 = image30;
+    }
+
+    public Binary getImage50() {
+        return image50;
+    }
+
+    public void setImage50(Binary image50) {
+        this.image50 = image50;
     }
 }
