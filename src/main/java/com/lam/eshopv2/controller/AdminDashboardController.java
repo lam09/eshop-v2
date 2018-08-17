@@ -60,6 +60,10 @@ public class AdminDashboardController {
         return "/admin-dashboard/dennemenu";
     }
 
+    @RequestMapping("/admin/appmanager")
+    public String appmanager(){
+        return "/admin-dashboard/appmanager";
+    }
 /*
     @RequestMapping("/admin/products")
     public String products(){

@@ -18,4 +18,20 @@ public class CategoryCollection {
 
     @DBRef
     List<ProductCollection> productCollections;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<ProductCollection> getProductCollections() {
+        return productCollections;
+    }
+
+    public void setProductCollections(List<ProductCollection> productCollections) {
+        this.productCollections = productCollections;
+    }
 }

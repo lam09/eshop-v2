@@ -3868,6 +3868,8 @@ fieldset[disabled] .btn-neutral.active {
     }
 }
 .save-btn{
+    background-color: #0d1318;
+    font-size: larger;
     position: fixed;
     top: 10%;
     right: 10%;
