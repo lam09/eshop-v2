@@ -3,8 +3,6 @@ package com.lam.eshopv2.controller;
 /**
  * Created by a.lam.tuan on 12. 6. 2018.
  */
-
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.lam.eshopv2.entity.Category;
 import com.lam.eshopv2.entity.Product;
 import com.lam.eshopv2.entity.ProductImage;
@@ -21,8 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

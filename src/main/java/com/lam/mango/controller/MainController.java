@@ -1,15 +1,20 @@
-package com.lam.restaurant;
+package com.lam.mango.controller;
 
+import com.mango.web.entity.Menu;
+import com.mango.web.utils.Ultil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by a.lam.tuan on 17. 7. 2018.
@@ -23,9 +28,19 @@ public class MainController {
     @Autowired
     FoodDao foodDao;
 
+    @RequestMapping("/login")
+    public String login(){
+        return "login";
+    }
+
     @RequestMapping("/admin/dennemenu")
     public String dennemenu(){
         return "/admin-dashboard/dennemenu";
+    }
+
+    @RequestMapping("/admin/foods")
+    public String foods(){
+        return "/admin-dashboard/foods";
     }
 
     @CrossOrigin(origins = "http://localhost")
@@ -36,7 +51,7 @@ public class MainController {
     List<Menu> getGroup(@RequestBody List<Menu> menuList){
         foodDao.deleteAll();
         menuList.stream().forEach(menu -> {
-            menu.foodList.stream().forEach(food -> {food.setId(null);food.setMenu(menu);});
+            menu.getFoodList().stream().forEach(food -> {food.setId(null);food.setMenu(menu);});
             menuDao.save(menu);System.out.println(menu.toString());
         });
         List<Menu> result = menuDao.findAll();
@@ -91,7 +106,8 @@ public class MainController {
     @RequestMapping(value = "/groups",method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, //
                     MediaType.APPLICATION_XML_VALUE })
-    public @ResponseBody List<Group> groups(){
+    public @ResponseBody
+    List<Group> groups(){
         List<Group> groups = new ArrayList<>();
         groups.add(new Group(1,"shoup"));
         groups.add(new Group(2,"main food"));

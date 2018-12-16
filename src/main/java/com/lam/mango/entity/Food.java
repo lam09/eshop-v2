@@ -1,9 +1,8 @@
-package com.lam.restaurant;
+package com.lam.mango.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * Created by a.lam.tuan on 17. 7. 2018.
